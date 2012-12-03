@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Mac OS X 10.8
+# This bootstraps Puppet on Mac OS X 10.8.
+#
+# Optional environmental variables:
+#   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
+#   - PUPPET_PACKAGE_URL: The URL to the Puppet package to install.
 #
 set -e
 
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL="http://downloads.puppetlabs.com/mac/facter-1.6.16.dmg"
-PUPPET_PACKAGE_URL="http://puppetlabs.com/downloads/mac/puppet-3.0.1.dmg"
-TMP_DIR="/tmp"
+FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-1.6.16.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/puppet-3.0.1.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
