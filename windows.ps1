@@ -41,6 +41,7 @@ if ($process.ExitCode -ne 0) {
 
 # Stop the service that it autostarts
 Write-Host "Stopping Puppet service that is running by default..."
+Start-Sleep -s 5
 Stop-Service -Name puppet
 
 Write-Host "Puppet successfully installed."
