@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Mac OS X 10.8.
+# This bootstraps Puppet on Mac OS X 10.8 and 10.7.
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
