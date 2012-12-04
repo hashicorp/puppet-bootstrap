@@ -1,6 +1,12 @@
-# This script installs Puppet on a Windows machine.
+<#
+.SYNOPSIS
+    Installs Puppet on this machine.
 
-$downloadUrl = "http://puppetlabs.com/downloads/windows/puppet-3.0.1.msi"
+.PARAMETER MsiUrl
+    This is the URL to the Puppet MSI file you want to install. This defaults
+    to a version from PuppetLabs.
+#>
+Param([string]$MsiUrl = "http://puppetlabs.com/downloads/windows/puppet-3.0.1.msi")
 
 #--------------------------------------------------------------------
 # NO TUNABLE BELOW THIS POINT
@@ -15,7 +21,7 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
 Write-Host "Downloading Puppet..."
 $downloadPath = [IO.Path]::GetTempFileName()
 $webClient = New-Object System.Net.WebClient
-$webClient.DownloadFile($downloadUrl, $downloadPath)
+$webClient.DownloadFile($MsiUrl, $downloadPath)
 
 # Install it
 Write-Host "Installing Puppet..."
