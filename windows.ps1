@@ -2,6 +2,11 @@
 .SYNOPSIS
     Installs Puppet on this machine.
 
+.DESCRIPTION
+    Downloads and installs the PuppetLabs Puppet MSI package.
+
+    This script requires administrative privileges.
+
 .PARAMETER MsiUrl
     This is the URL to the Puppet MSI file you want to install. This defaults
     to a version from PuppetLabs.
