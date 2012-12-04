@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# This bootsraps Puppet on Centos 5.x
-# It has been tested on centos 5.6 64bit
+# This bootstraps Puppet on CentOS 5.x
+# It has been tested on CentOS 5.6 64bit
 
 set -e
 
