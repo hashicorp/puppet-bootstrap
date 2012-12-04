@@ -8,9 +8,6 @@
 #>
 Param([string]$MsiUrl = "http://puppetlabs.com/downloads/windows/puppet-3.0.1.msi")
 
-#--------------------------------------------------------------------
-# NO TUNABLE BELOW THIS POINT
-#--------------------------------------------------------------------
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host -ForegroundColor Red "You must run this script as an administrator."
