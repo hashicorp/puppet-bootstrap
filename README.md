@@ -15,12 +15,17 @@ operating system.**
 The goal of this repository is to create a set of scripts that run
 on every version of every platform to set up Puppet.
 
-## What the Scripts Do
+## Features of Each Script
 
-Each script installs the Puppet agent and Facter, but _does not_ start
-the Puppet agent service that many PuppetLabs packages automatically
-install. It is up to you to determine if you'd like to start the
-agent, using additional scripting.
+* Requires no parameters and runs without any human input, but can
+  optionally take parameters to tune the packages the install and such. See
+  each script for details on the parameters.
+* Uses only _built-in_ software to install Puppet. These shell scripts
+  have no external dependencies, by design.
+* Install Puppet agent and Facter
+* Does _not_ auto-start the Puppet agent service on the machine. Your
+  bootstrap can choose to do this in addition to these scripts, if you'd
+  like.
 
 ## Using a Script
 
