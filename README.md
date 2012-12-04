@@ -2,11 +2,14 @@
 
 This repository contains a multitude of single file scripts for setting
 up [Puppet](http://puppetlabs.com/puppet/what-is-puppet/) on a variety
-of machines. Puppet is fantastic for managing infrastructure but there is a
-chicken/egg problem of getting Puppet on a machine so that Puppet can then manage
-the installation and configuration of software on the machine. This repository
-contains small scripts to bootstrap your Puppet setup on various operating
-systems.
+of machines.
+
+Puppet is fantastic for managing infrastructure but there is a chicken/egg problem
+of getting Puppet initially installed on a machine so that Puppet can then
+take over for the remainder of system setup.
+
+This repository contains small scripts to bootstrap your system just enough
+so that Puppet can then take over.
 
 **Please contribute by forking and sending a pull request for your
 operating system.**
