@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Mac OS X 10.8.
+# This bootstraps Puppet on Mac OS X 10.8 and 10.7.
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
@@ -39,7 +39,7 @@ function install_dmg() {
   echo "-- Mounting DMG..."
   local plist_path=$(mktemp -t puppet-bootstrap)
   hdiutil attach -plist ${dmg_path} > ${plist_path}
-  mount_point=$(grep -E -o -i '/Volumes/[-.a-z0-9]+' ${plist_path})
+  mount_point=$(grep -E -o '/Volumes/[-.a-zA-Z0-9]+' ${plist_path})
 
   # Install. It will be the only pkg in there, so just find any pkg
   echo "-- Installing pkg..."
