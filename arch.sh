@@ -18,3 +18,6 @@ pacman -S --noconfirm ruby
 
 # Install Puppet and Facter
 gem install puppet facter --no-ri --no-rdoc --no-user-install
+
+# Create the Puppet group so it can run
+groupadd puppet
