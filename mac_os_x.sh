@@ -54,3 +54,8 @@ function install_dmg() {
 # Install Puppet and Facter
 install_dmg "Puppet" ${PUPPET_PACKAGE_URL}
 install_dmg "Facter" ${FACTER_PACKAGE_URL}
+
+# Create the puppet group, otherwise Puppet fails.
+dscl . -create /groups/puppet
+dscl . -create /groups/puppet gid 1000
+dscl . -create /groups/puppet passwd '*'
