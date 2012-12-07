@@ -21,3 +21,5 @@ gem install puppet facter --no-ri --no-rdoc --no-user-install
 
 # Create the Puppet group so it can run
 groupadd puppet
+
+cp `gem contents puppet | grep puppetagent.service` /usr/lib/systemd/system
