@@ -11,6 +11,11 @@ if [ "$EUID" -ne "0" ]; then
   exit 1
 fi
 
+if which puppet > /dev/null 2>&1; then
+  echo "Puppet is already installed."
+  exit 0
+fi
+
 # Install puppet labs repo
 echo "Configuring PuppetLabs repo..."
 repo_path=$(mktemp)
