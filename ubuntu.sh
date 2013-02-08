@@ -17,6 +17,14 @@ if [ "$EUID" -ne "0" ]; then
   exit 1
 fi
 
+# Do the initial apt-get update
+echo "Initial apt-get update..."
+apt-get update >/dev/null
+
+# Install wget if we have to (some older Ubuntu versions)
+echo "Installing wget..."
+apt-get install -y wget >/dev/null
+
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
 repo_deb_path=$(mktemp)
