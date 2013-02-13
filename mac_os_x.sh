@@ -59,3 +59,6 @@ install_dmg "Facter" ${FACTER_PACKAGE_URL}
 dscl . -create /groups/puppet
 dscl . -create /groups/puppet gid 1000
 dscl . -create /groups/puppet passwd '*'
+
+# Hide all users from the loginwindow with uid below 500, which will include the puppet user
+defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
