@@ -4,7 +4,7 @@
 
 set -e
 
-REPO_URL="http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm"
+REPO_URL="http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-7.noarch.rpm"
 
 if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2

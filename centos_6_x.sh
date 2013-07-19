@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # This bootstraps Puppet on CentOS 6.x
-# It has been tested on CentOS 6.3 64bit
+# It has been tested on CentOS 6.4 64bit
 
 set -e
 
-REPO_URL="http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm"
+REPO_URL="http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-7.noarch.rpm"
 
 if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2
