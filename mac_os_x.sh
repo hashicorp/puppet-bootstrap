@@ -11,8 +11,8 @@ set -e
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-1.7.1.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/puppet-3.1.1.dmg"}
+FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-1.7.2.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/puppet-3.2.3.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
@@ -54,11 +54,6 @@ function install_dmg() {
 # Install Puppet and Facter
 install_dmg "Puppet" ${PUPPET_PACKAGE_URL}
 install_dmg "Facter" ${FACTER_PACKAGE_URL}
-
-# Create the puppet group, otherwise Puppet fails.
-dscl . -create /groups/puppet
-dscl . -create /groups/puppet gid 1000
-dscl . -create /groups/puppet passwd '*'
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
