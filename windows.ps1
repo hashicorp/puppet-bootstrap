@@ -16,7 +16,7 @@
     This is the URL to the Puppet MSI file you want to install. This defaults
     to a version from PuppetLabs.
 #>
-Param([string]$MsiUrl = "http://puppetlabs.com/downloads/windows/puppet-3.1.1.msi")
+Param([string]$MsiUrl = "http://puppetlabs.com/downloads/windows/puppet-3.2.4.msi")
 
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
