@@ -3,6 +3,10 @@
 # This bootstraps Puppet on Debian
 set -e
 
+# Do the initial apt-get update
+echo "Initial apt-get update..."
+apt-get update >/dev/null
+
 which lsb_release || apt-get install -y lsb-release
 
 # Load up the release information
@@ -17,10 +21,6 @@ if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
 fi
-
-# Do the initial apt-get update
-echo "Initial apt-get update..."
-apt-get update >/dev/null
 
 # Install wget if we have to (some older Debian versions)
 echo "Installing wget..."
