@@ -3,6 +3,8 @@
 # This bootstraps Puppet on Debian
 set -e
 
+which lsb_release || apt-get install -y lsb-release
+
 # Load up the release information
 DISTRIB_CODENAME=$(lsb_release -c -s)
 
