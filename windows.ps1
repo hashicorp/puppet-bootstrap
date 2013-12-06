@@ -37,17 +37,11 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
     Exit 1
 }
 
-# Download Puppet
-Write-Host "Downloading Puppet..."
-$downloadPath = [IO.Path]::GetTempFileName()
-$webClient = New-Object System.Net.WebClient
-$webClient.DownloadFile($MsiUrl, $downloadPath)
-
-# Install it
-Write-Host "Installing Puppet..."
-$install_args = @("/i", $downloadPath, "/qn", "/norestart")
-$process = Start-Process -FilePath msiexec.exe -ArgumentList $install_args -Wait -PassThru
-if ($process.ExitCode -ne 0) {
+  # Install it - msiexec will download from the url
+  $install_args = @("/qn", "/norestart","/i", $MsiUrl)
+  Write-Host "Installing Puppet. Running msiexec.exe $install_args"
+  $process = Start-Process -FilePath msiexec.exe -ArgumentList $install_args -Wait -PassThru
+  if ($process.ExitCode -ne 0) {
     Write-Host "Installer failed."
     Exit 1
 }
