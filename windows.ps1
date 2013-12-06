@@ -10,7 +10,7 @@
     You can run this script from an old-style cmd.exe prompt using the
     following:
 
-      powershell.exe -ExecutionPolicy Unrestricted -NoExit -File "windows.ps1"
+      powershell.exe -ExecutionPolicy Unrestricted -NoLogo -NoProfile -Command "& '.\windows.ps1'"
 
 .PARAMETER MsiUrl
     This is the URL to the Puppet MSI file you want to install. This defaults
