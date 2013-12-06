@@ -15,8 +15,21 @@
 .PARAMETER MsiUrl
     This is the URL to the Puppet MSI file you want to install. This defaults
     to a version from PuppetLabs.
+
+.PARAMETER PuppetVersion
+    This is the version of Puppet that you want to install. If you pass this it will override the version in the MsiUrl.
+    This defaults to $null.
 #>
-Param([string]$MsiUrl = "http://puppetlabs.com/downloads/windows/puppet-3.2.4.msi")
+param(
+   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi"
+  ,[string]$PuppetVersion = $null
+)
+
+if ($PuppetVersion -ne $null) {
+  $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-$($PuppetVersion).msi"
+  Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
+}
+
 
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
