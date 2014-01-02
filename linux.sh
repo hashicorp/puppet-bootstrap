@@ -73,31 +73,31 @@ function detect_os {
   elif [ -f /etc/arch-release ] ; then
     DistroBasedOn='Arch'
   fi
-  DistroBasedOn=`lowercase $DistroBasedOn`
+  DistroBasedOn=$(lowercase $DistroBasedOn)
 
   # Determine further distro details
   # We take this approach to avoid forcing lsb-base package installs
   case $DistroBasedOn in
     redhat)
-      DIST=`cat /etc/redhat-release |sed s/\ release.*//`
-      PSUEDONAME=`cat /etc/redhat-release | sed s/.*\(// | sed s/\)//`
-      REV=`cat /etc/redhat-release | sed s/.*release\ // | sed s/\ .*//`
+      DIST=$(cat /etc/redhat-release |sed s/\ release.*//)
+      PSUEDONAME=$(cat /etc/redhat-release | sed s/.*\(// | sed s/\)//)
+      REV=$(cat /etc/redhat-release | sed s/.*release\ // | sed s/\ .*//)
       ;;
     debian)
       if hash lsb_release ; then
-        DIST=`lsb_release --id --short`
-        PSUEDONAME=`lsb_release --codename --short`
-        REV=`lsb_release --release --short`
+        DIST=$(lsb_release --id --short)
+        PSUEDONAME=$(lsb_release --codename --short)
+        REV=$(lsb_release --release --short)
       elif [ -f /etc/lsb-release ] ; then
-        DIST=`grep '^DISTRIB_ID' /etc/lsb-release | awk -F=  '{ print $2 }'`
-        PSUEDONAME=`grep '^DISTRIB_CODENAME' /etc/lsb-release | awk -F=  '{ print $2 }'`
-        REV=`grep '^DISTRIB_RELEASE' /etc/lsb-release | awk -F=  '{ print $2 }'`
+        DIST=$(grep '^DISTRIB_ID' /etc/lsb-release | awk -F=  '{ print $2 }')
+        PSUEDONAME=$(grep '^DISTRIB_CODENAME' /etc/lsb-release | awk -F=  '{ print $2 }')
+        REV=$(grep '^DISTRIB_RELEASE' /etc/lsb-release | awk -F=  '{ print $2 }')
       elif [ -f /etc/os-release ] ; then
-        DIST=`grep '^ID' /etc/os-release | awk -F=  '{ print $2 }'`
-        PSUEDONAME=`grep '^VERSION=' /etc/os-release | cut -d '(' -f 2 | cut -d ')' -f 1`
-        REV=`grep '^VERSION_ID' /etc/os-release | awk -F=  '{ print $2 }'`
+        DIST=$(grep '^ID' /etc/os-release | awk -F=  '{ print $2 }')
+        PSUEDONAME=$(grep '^VERSION=' /etc/os-release | cut -d '(' -f 2 | cut -d ')' -f 1)
+        REV=$(grep '^VERSION_ID' /etc/os-release | awk -F=  '{ print $2 }')
       else
-        REV=`cat /etc/debian_version`
+        REV=$(cat /etc/debian_version)
       fi
       ;;
     arch)
@@ -108,8 +108,8 @@ function detect_os {
       ;;
   esac
 
-  MACH=`uname -m`
-  MAJOR_REV=`echo $REV | cut -d '.' -f 1`
+  MACH=$(uname -m)
+  MAJOR_REV=$(echo $REV | cut -d '.' -f 1)
 }
 
 # Idempotent puppet and puppet repository installer
