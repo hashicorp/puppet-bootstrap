@@ -3,7 +3,7 @@ set -e
 
 require_root_access() {
   if [[ $EUID -ne 0 ]]; then
-     echo "ERROR: This script requires root access" 1>&2
+     echo "ERROR: This script requires root access"
      exit 1
   fi
 }
@@ -33,17 +33,23 @@ is_installed() {
 ensure_package_present() {
   package="$1"
   is_installed "$package" && return 0 # return if it's installed already
+  echo "installing $package and dependencies..."
 
   detect_os
   case $DistroBasedOn in
     redhat)
-      yum -y install "$package"
+      yum -y --quiet install "$package"
       ;;
     debian)
       apt-get -qq update
-      apt-get -qq install -y "$package"
+      apt-get -qq install -y "$package" > /dev/null
       ;;
     arch)
+      # Update the pacman repositories
+      pacman -Sy
+
+      # Install Ruby (arch uses gem install of puppet)
+      pacman -S --noconfirm --needed "$package"
       ;;
     *)
       echo "Unable to install \"$package\": unknown package management system"
@@ -118,46 +124,65 @@ ensure_puppet() {
 
   ensure_package_present wget
   detect_os
+  OS_DESCRIPTION="Detected ${DistroBasedOn}-based distro: $DIST $PSUEDONAME $REV for $MACH"
   case $DistroBasedOn in
     redhat)
-      echo "detected $DistroBasedOn based distro"
-      PUPPETLABS_KEY_URL="http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs"
-      REPO_URL="http://yum.puppetlabs.com/el/${MAJOR_REV}/products/${MACH}/puppetlabs-release-${MAJOR_REV}-7.noarch.rpm"
+      echo "$OS_DESCRIPTION"
+      REPO_URL="https://yum.puppetlabs.com/el/${MAJOR_REV}/products/${MACH}/puppetlabs-release-${MAJOR_REV}-7.noarch.rpm"
       # Install GPG key
-      rpm -qi gpg-pubkey-4bd6ec30-4ff1e4fa /dev/null 2>&1 || rpm --import "$PUPPETLABS_KEY_URL"
-      # Install puppet yum repository
-      is_installed puppetlabs-release || rpm -ivh --quiet $REPO_URL
+      if ! rpm -qi gpg-pubkey-4bd6ec30-4ff1e4fa > /dev/null 2>&1 ; then 
+        gpg_key=$(mktemp)
+        gpg --recv-key --trust-model direct --keyserver pool.sks-keyservers.net 4BD6EC30
+        gpg --export --armor 47B320EB4C7C375AA9DAE1A01054B7A24BD6EC30 > $gpg_key
+        echo "Installing puppetlabs GPG key"
+        rpm --import $gpg_key
+        rm $gpg_key
+        rpm -qi gpg-pubkey-4bd6ec30-4ff1e4fa > /dev/null 2>&1 && echo "Puppet GPG key installed successfully" || echo "Error: Puppet GPG key install failed"
+      fi
+
+      if ! is_installed puppetlabs-release ; then
+        # Install puppet yum repository
+        echo "installing puppetlabs yum repository from $REPO_URL"
+        repo_path="$(mktemp).rpm"
+        wget --quiet --output-document=${repo_path} ${REPO_URL}
+        yum -y --quiet install $repo_path
+        rm $repo_path
+        is_installed puppetlabs-release && echo "Puppetlabs yum repo installed sucessfully" || echo "Error: puppetlabs repo install failed"
+      fi
       # Install puppet itself
       ensure_package_present puppet
       ;;
 
     debian)
-      echo "detected $DistroBasedOn based distro"
+      echo "$OS_DESCRIPTION"
 
       # Ensure the puppet repository is available
       if ! is_installed "puppetlabs-release" ; then
-        ensure_package_present ca-certificates
+        echo "Puppetlabs repository not detected. Installing..."
+
         REPO_URL="https://apt.puppetlabs.com/puppetlabs-release-${PSUEDONAME}.deb"
         repo_path=$(mktemp)
-        wget --no-verbose --output-document=${repo_path} ${REPO_URL}
+        wget --quiet --output-document=${repo_path} ${REPO_URL}
         dpkg --install ${repo_path}
         apt-get -qq update
         rm ${repo_path}
-        is_installed "puppetlabs-release" && echo "puppet repo installed successfully"
+        is_installed "puppetlabs-release" && echo "puppetlabs repository installed successfully"
       else
         echo "puppet repo already installed"
       fi
 
+      # Install puppet
       ensure_package_present puppet
       ;;
 
     arch)
       echo "detected arch distro"
-      # Update the pacman repositories
-      pacman -Sy
 
-      # Install Ruby (arch uses gem install of puppet)
-      pacman -S --noconfirm --needed ruby
+      # Install Puppet and Facter as ruby gems
+      ensure_gem puppet
+      ensure_gem facter
+      ensure_group puppet
+
       ;;
     *)
       echo "Unsupported OS - cannot install puppet"
@@ -166,10 +191,53 @@ ensure_puppet() {
   esac
 }
 
+is_gem_installed() {
+  gem list | grep -q "${gem} ("
+}
+
+ensure_gem() {
+  gem="$1"
+  ensure_package_present ruby
+  if ! is_gem_installed "$gem" ; then
+    gem install "$gem" --no-ri --no-rdoc --no-user-install
+    is_gem_installed "$gem" || exit 1
+  fi
+}
+
+ensure_group() {
+  [ -z "$1" ] && exit 1
+  group="$1"
+  if ! getent group "$group" > /dev/null 2>&1 ; then
+    groupadd "$group"
+  fi
+
+}
+
 # Both facter and puppet need to be available
 is_puppet_installed() {
   ( hash puppet && hash facter ) > /dev/null 2>&1
 }
 
 require_root_access
-ensure_puppet && echo "puppet and facter currently installed"
+
+# Install puppet if it's not installed already
+if is_puppet_installed ; then
+  echo "Puppet and facter already installed"
+  exit 0
+else
+  echo "No existing puppet install detected"
+  echo "Preparing to install puppet and facter"
+  ensure_puppet
+fi
+
+# Verify puppet install before telling user it's installed
+echo "Verifying that puppet and facter installed successfully..."
+if is_puppet_installed ; then
+  echo "Detected puppet version $(puppet -V)"
+  echo "Detected facter version $(facter --version)"
+  echo "Puppet and facter installed successfully"
+else
+  echo "Error: puppet and/or facter not detected following install attempt"
+  exit 1
+fi
+

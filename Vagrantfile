@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define :centos65 do |node|
       node.vm.box = 'centos-64-x64-vbox4210-nocm'
       node.vm.box_url = 'http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210-nocm.box'
-      node.vm.provision "shell", inline: "yum update -y"
+      node.vm.provision "shell", inline: "yum update -y --quiet"
       node.vm.provision "shell", path: "linux.sh"
     end
 
@@ -37,6 +37,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define :ubuntu1204 do |node|
       node.vm.box = 'ubuntu-server-12042-x64-vbox4210-nocm'
       node.vm.box_url = 'http://puppet-vagrant-boxes.puppetlabs.com/ubuntu-server-12042-x64-vbox4210-nocm.box'
+
+      # hack to avoid 'stdin: is not a tty' error on startup
+      node.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
       node.vm.provision "shell", path: "linux.sh"
     end
 
