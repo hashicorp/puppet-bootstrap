@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-function require_root_access {
+require_root_access() {
   if [[ $EUID -ne 0 ]]; then
      echo "ERROR: This script requires root access" 1>&2
      exit 1
@@ -9,7 +9,7 @@ function require_root_access {
 }
 
 # Check if a package is installed
-function is_installed() {
+is_installed() {
   package="$1"
   detect_os
   case $DistroBasedOn in
@@ -30,7 +30,7 @@ function is_installed() {
 }
 
 # Check if the package is installed, and install it if not present
-function ensure_package_present {
+ensure_package_present() {
   package="$1"
   is_installed "$package" && return 0 # return if it's installed already
 
@@ -57,7 +57,7 @@ lowercase(){
 }
 
 # Figure out what distribution or OS we're running on
-function detect_os {
+detect_os() {
   # Inspired by http://stackoverflow.com/questions/394230/detect-the-os-from-a-bash-script
 
   if [ -n "$DIST" ] ; then
@@ -113,7 +113,7 @@ function detect_os {
 }
 
 # Idempotent puppet and puppet repository installer
-function ensure_puppet {
+ensure_puppet() {
   is_puppet_installed && echo "Puppet already installed" && return 0 
 
   ensure_package_present wget
@@ -167,7 +167,7 @@ function ensure_puppet {
 }
 
 # Both facter and puppet need to be available
-function is_puppet_installed {
+is_puppet_installed() {
   ( hash puppet && hash facter ) > /dev/null 2>&1
 }
 
