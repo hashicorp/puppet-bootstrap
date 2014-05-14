@@ -45,6 +45,8 @@ echo "Puppet installed!"
 
 # Install RubyGems for the provider
 echo "Installing RubyGems..."
-apt-get install -y rubygems >/dev/null
+if [ $DISTRIB_CODENAME != "trusty" ]; then
+  apt-get install -y rubygems >/dev/null
+fi
 gem install --no-ri --no-rdoc rubygems-update
 update_rubygems >/dev/null
