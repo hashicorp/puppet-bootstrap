@@ -76,3 +76,22 @@ if (!($PuppetInstalled)) {
 
   Write-Host "Puppet successfully installed."
 }
+
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
+}
