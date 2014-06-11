@@ -55,7 +55,7 @@ if (!($PuppetInstalled)) {
   }
 
   if ($PuppetMaster -ne $null) {
-    $install_args = @("/qn", "/norestart","/i", $MsiUrl, "PUPPET_MASTER_SERVER=$PuppetMaster")
+    $install_args = @("/qn", "/norestart","/i", "$MsiUrl", "PUPPET_MASTER_SERVER=$PuppetMaster")
   } else {
     $install_args = @("/qn", "/norestart","/i", $MsiUrl)
   }
