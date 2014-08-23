@@ -6,6 +6,8 @@ set -e
 
 REPO_URL="http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
 
+yum -y install wget
+
 if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
