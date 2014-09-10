@@ -11,6 +11,12 @@ function installPackage {
     echo "Error installing package ${1}"
   fi
 }
+
+function isPackageInstalled {
+  if dpkg --get-selections | grep -q "^${1}[[:space:]]*install$" >/dev/null; then
+    echo "Package ${1} is already installed."
+  fi
+}
 # Load up the release information
 . /etc/lsb-release
 
@@ -24,20 +30,20 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-pkg=puppet
-if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
-  echo "Puppet is already installed."
+test=$(isPackageInstalled "puppet")
+if [ -n  "$test" ]; then
   exit 0
 fi
 
-# Do the initial apt-get update
-echo "Initial apt-get update..."
-apt-get update >/dev/null
-
 # Install wget if we have to (some older Ubuntu versions)
-echo "Installing wget..."
-installPackage 'wget'
-
+test=$(isPackageInstalled "wget")
+if [ -z  "$test" ]; then
+  # Do the initial apt-get update
+  echo "Initial apt-get update..."
+  apt-get update >/dev/null
+  echo "Installing wget..."
+  installPackage 'wget'
+fi
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
 repo_deb_path=$(mktemp)
