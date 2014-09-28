@@ -14,4 +14,4 @@ fi
 pacman -Sy
 
 # Install puppet
-pacman -S puppet
+pacman -S --noconfirm puppet
