@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Ubuntu 12.04 LTS.
+# This bootstraps Puppet on Ubuntu 14.04 LTS.
 #
 set -e
 
+function installPackage {
+  if DEBIAN_FRONTEND=noninteractive bash -c "apt-get -qq -y ${2} install ${1}" >/dev/null; then
+    echo "Successfully installed package ${1}"
+  else
+    echo "Error installing package ${1}"
+  fi
+}
+
+function isPackageInstalled {
+  if dpkg --get-selections | grep -q "^${1}[[:space:]]*install$" >/dev/null; then
+    echo "Package ${1} is already installed."
+  fi
+}
 # Load up the release information
 . /etc/lsb-release
 
@@ -17,19 +30,20 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-if which puppet > /dev/null 2>&1 -a apt-cache policy | grep --quiet apt.puppetlabs.com; then
-  echo "Puppet is already installed."
+test=$(isPackageInstalled "puppet")
+if [ -n  "$test" ]; then
   exit 0
 fi
 
-# Do the initial apt-get update
-echo "Initial apt-get update..."
-apt-get update >/dev/null
-
 # Install wget if we have to (some older Ubuntu versions)
-echo "Installing wget..."
-apt-get install -y wget >/dev/null
-
+test=$(isPackageInstalled "wget")
+if [ -z  "$test" ]; then
+  # Do the initial apt-get update
+  echo "Initial apt-get update..."
+  apt-get update >/dev/null
+  echo "Installing wget..."
+  installPackage 'wget'
+fi
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
 repo_deb_path=$(mktemp)
@@ -39,14 +53,12 @@ apt-get update >/dev/null
 
 # Install Puppet
 echo "Installing Puppet..."
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet >/dev/null
-
-echo "Puppet installed!"
+installPackage 'puppet' "-o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\""
 
 # Install RubyGems for the provider
 echo "Installing RubyGems..."
 if [ $DISTRIB_CODENAME != "trusty" ]; then
-  apt-get install -y rubygems >/dev/null
+  installPackage 'rubygems'
 fi
 gem install --no-ri --no-rdoc rubygems-update
 update_rubygems >/dev/null
