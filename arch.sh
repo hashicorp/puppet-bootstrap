@@ -13,13 +13,5 @@ fi
 # Update the pacman repositories
 pacman -Sy
 
-# Install Ruby
-pacman -S --noconfirm --needed ruby
-
-# Install Puppet and Facter
-gem install puppet facter --no-ri --no-rdoc --no-user-install
-
-# Create the Puppet group so it can run
-groupadd puppet
-
-cp `gem contents puppet | grep puppet.service` /usr/lib/systemd/system
+# Install puppet
+pacman -S --noconfirm puppet
