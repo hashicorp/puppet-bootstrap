@@ -21,11 +21,11 @@
     This defaults to $null.
 #>
 param(
-   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi"
+   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-3.7.3-x64.msi"
   ,[string]$PuppetVersion = $null
 )
 
-if ($PuppetVersion -ne $null) {
+if ($PuppetVersion) {
   $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-$($PuppetVersion).msi"
   Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
 }
