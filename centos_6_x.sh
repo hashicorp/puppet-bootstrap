@@ -4,7 +4,7 @@
 
 set -e
 
-REPO_URL="http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-7.noarch.rpm"
+REPO_URL="http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
 
 if [ "$EUID" -ne "0" ]; then
   echo "This script must be run as root." >&2
@@ -15,6 +15,10 @@ if which puppet > /dev/null 2>&1; then
   echo "Puppet is already installed."
   exit 0
 fi
+
+# Install wget
+echo "Installing wget..."
+yum install -y wget > /dev/null
 
 # Install puppet labs repo
 echo "Configuring PuppetLabs repo..."
