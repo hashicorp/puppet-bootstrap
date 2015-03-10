@@ -28,7 +28,7 @@ apt-get update >/dev/null
 
 # Install wget if we have to (some older Ubuntu versions)
 echo "Installing wget..."
-apt-get install -y wget >/dev/null
+apt-get --yes install wget >/dev/null
 
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
@@ -45,8 +45,8 @@ echo "Puppet installed!"
 
 # Install RubyGems for the provider
 echo "Installing RubyGems..."
-if [ $DISTRIB_CODENAME != "trusty" ]; then
-  apt-get install -y rubygems >/dev/null
+if [ "$DISTRIB_CODENAME" != "trusty" ]; then
+  apt-get --yes install rubygems >/dev/null
 fi
 gem install --no-ri --no-rdoc rubygems-update
 update_rubygems >/dev/null
