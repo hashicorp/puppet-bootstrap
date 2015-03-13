@@ -18,3 +18,5 @@ fi
 # Create a Cron Job Instead
 echo "Starting Puppet Cron..."
 puppet resource cron puppet-agent ensure=present command="${PUPPET_CRON}" user=root minute=0
+# Force a run to generate ssl sign request
+puppet agent --test || true

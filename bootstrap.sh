@@ -5,21 +5,16 @@
 set -e
 
 PLATFORM=${PLATFORM:-$1}
+PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-$2}
+PUPPET_SERVER=${PUPPET_SERVER:-$3}
 
 # Install Puppet Using the Puppet Labs Package Repositories
 case "${PLATFORM}" in
-redhat_5|centos_5|centos_5_x)
-  sudo ./centos_5_x.sh
-  ;;
-redhat_6|centos_6|centos_6_x)
-  sudo ./centos_6_x.sh
-  ;;
-redhat_7|centos_7|centos_7_x)
-  sudo ./centos_7_x.sh
-  ;;
-ubuntu)
-  sudo ./ubuntu.sh
-  ;;
+redhat_5|centos_5|centos_5_x) sudo ./centos_5_x.sh ;;
+redhat_6|centos_6|centos_6_x) sudo ./centos_6_x.sh ;;
+redhat_7|centos_7|centos_7_x) sudo ./centos_7_x.sh ;;
+debian) sudo ./debian.sh ;;
+ubuntu) sudo ./ubuntu.sh ;;
 osx|mac_os_x)
   PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"wheel"}
   PUPPET_SERVICE=${PUPPET_SERVICE:-"com.puppetlabs.puppet"}
@@ -27,7 +22,7 @@ osx|mac_os_x)
   ;;
 *)
   echo "Unknown/Unsupported PLATFORM." >&2
-  echo "Usage: $0 {redhat_5|redhat_6|redhat_7|ubuntu|osx}" >&2
+  echo "Usage: $0 {redhat_5|redhat_6|redhat_7|ubuntu|osx} [environment] [server]" >&2
   exit 1
 esac
 
