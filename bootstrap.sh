@@ -24,8 +24,10 @@ osx|mac_os_x)
   PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"wheel"}
   PUPPET_SERVICE=${PUPPET_SERVICE:-"com.puppetlabs.puppet"}
   sudo ./mac_os_x.sh
+  ;;
 *)
-  echo "Unknown/Unsupported PLATFORM. Usage: $0 {redhat_5|redhat_6|redhat_7|ubuntu|osx}" >&2
+  echo "Unknown/Unsupported PLATFORM." >&2
+  echo "Usage: $0 {redhat_5|redhat_6|redhat_7|ubuntu|osx}" >&2
   exit 1
 esac
 
