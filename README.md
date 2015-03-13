@@ -1,5 +1,24 @@
 # Puppet Bootstrap Scripts
 
+## Usage
+
+### Quick Install/Configure/Start Puppet
+
+```shell
+curl -LO https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz
+tar xzvf master.tar.gz
+cd puppet-bootstrap-master
+./bootstrap.sh osx
+```
+
+### bootstrap options
+
+```shell
+./bootstrap.sh {redhat_5|redhat_6|redhat_7|debian|ubuntu|osx} [environment] [server]
+```
+
+## Overview
+
 This repository contains a multitude of single file scripts for setting
 up [Puppet](http://puppetlabs.com/puppet/what-is-puppet/) on a variety
 of machines.
