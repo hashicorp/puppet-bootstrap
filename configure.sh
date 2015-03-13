@@ -50,7 +50,7 @@ cat > /etc/puppet/puppet.conf <<-EOF
 [agent]
     # The file in which puppetd stores a list of the classes
     # associated with the retrieved configuratiion.  Can be loaded in
-    # the separate ``puppet`` executable using the ``--loadclasses``
+    # the separate \`\`puppet\`\` executable using the \`\`--loadclasses\`\`
     # option.
     # The default value is '\$confdir/classes.txt'.
     classfile = \$vardir/classes.txt
