@@ -32,9 +32,9 @@ osx|mac_os_x)
 esac
 
 # Configure /etc/puppet/puppet.conf
-. configure.sh
+sudo ./configure.sh
 
 # Start the Puppet Agent Service
-. service.sh
+sudo ./service.sh
 
 echo "Success!!"

@@ -8,8 +8,13 @@ PUPPET_SERVER=${PUPPET_SERVER:-"pupt001.projectdragonfly.org"}
 PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-"staging"}
 PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 
+if [ "$(id -u)" != "0" ]; then
+  echo "This script must be run as root." >&2
+  exit 1
+fi
+
 echo "Configuring Puppet..."
-sudo cat > /etc/puppet/puppet.conf <<-EOF
+cat > /etc/puppet/puppet.conf <<-EOF
 # Deployment puppet.conf config for puppet
 # WARNING: this file has been automatically setup by puppet-bootstrap
 # Please make changes there and rerun setup, not here, as they will be overwritten....
@@ -54,5 +59,5 @@ sudo cat > /etc/puppet/puppet.conf <<-EOF
     splaylimit = 20m
     #ignorecache = true
 EOF
-sudo chown root:${PUPPET_ROOT_GROUP} /etc/puppet/puppet.conf
-sudo chmod 0644 /etc/puppet/puppet.conf
+chown root:${PUPPET_ROOT_GROUP} /etc/puppet/puppet.conf
+chmod 0644 /etc/puppet/puppet.conf
