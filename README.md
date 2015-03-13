@@ -8,7 +8,7 @@
 curl -LO https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz
 tar xzvf master.tar.gz
 cd puppet-bootstrap-master
-./bootstrap.sh osx
+sudo ./bootstrap.sh osx
 ```
 
 ### bootstrap options
