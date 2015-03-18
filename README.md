@@ -17,6 +17,12 @@ sudo ./bootstrap.sh osx
 ./bootstrap.sh {redhat_5|redhat_6|redhat_7|debian|ubuntu|osx} [environment] [server]
 ```
 
+### force puppet run (after sign cert)
+
+```shell
+sudo puppet agent --test
+```
+
 ## Overview
 
 This repository contains a multitude of single file scripts for setting
