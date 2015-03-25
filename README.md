@@ -5,7 +5,7 @@
 ### One Line Install/Configure/Start Puppet
 
 ```shell
-curl -sSL http://git.io/jLJU | sudo bash osx
+curl -sSL https://git.io/jLJU | sudo bash -s osx
 ```
 
 ### Advanced Install/Configure/Start Puppet
