@@ -5,7 +5,7 @@
 ### One Line Install/Configure/Start Puppet
 
 ```shell
-curl -sSL https://raw.githubusercontent.com/edestecd/puppet-bootstrap/master/express.sh | sudo bash osx
+curl -sSL http://git.io/jLJU | sudo bash osx
 ```
 
 ### Advanced Install/Configure/Start Puppet
