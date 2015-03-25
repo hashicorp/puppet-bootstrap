@@ -2,13 +2,18 @@
 
 ## Usage
 
-### Quick Install/Configure/Start Puppet
+### One Line Install/Configure/Start Puppet
 
 ```shell
-curl -LO https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz
-tar xzvf master.tar.gz
-cd puppet-bootstrap-master
-sudo ./bootstrap.sh osx
+curl -sSL https://raw.githubusercontent.com/edestecd/puppet-bootstrap/master/express.sh | sudo bash osx
+```
+
+### Advanced Install/Configure/Start Puppet
+
+```shell
+curl -L https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz | tar xzv
+sudo puppet-bootstrap-master/bootstrap.sh osx
+rm -rf puppet-bootstrap-master
 ```
 
 ### bootstrap options

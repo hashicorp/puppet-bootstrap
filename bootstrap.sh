@@ -4,6 +4,7 @@
 #
 set -e
 
+BOOTSTRAP_HOME=${BOOTSTRAP_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 PLATFORM=${PLATFORM:-$1}
 PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-$2}
 PUPPET_SERVER=${PUPPET_SERVER:-$3}
@@ -15,15 +16,15 @@ fi
 
 # Install Puppet Using the Puppet Labs Package Repositories
 case "${PLATFORM}" in
-redhat_5|centos_5|centos_5_x) source ./centos_5_x.sh ;;
-redhat_6|centos_6|centos_6_x) source ./centos_6_x.sh ;;
-redhat_7|centos_7|centos_7_x) source ./centos_7_x.sh ;;
-debian) source ./debian.sh ;;
-ubuntu) source ./ubuntu.sh ;;
+redhat_5|centos_5|centos_5_x) source "${BOOTSTRAP_HOME}/centos_5_x.sh" ;;
+redhat_6|centos_6|centos_6_x) source "${BOOTSTRAP_HOME}/centos_6_x.sh" ;;
+redhat_7|centos_7|centos_7_x) source "${BOOTSTRAP_HOME}/centos_7_x.sh" ;;
+debian) source "${BOOTSTRAP_HOME}/debian.sh" ;;
+ubuntu) source "${BOOTSTRAP_HOME}/ubuntu.sh" ;;
 osx|mac_os_x)
   PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"wheel"}
   PUPPET_SERVICE=${PUPPET_SERVICE:-"com.puppetlabs.puppet"}
-  source ./mac_os_x.sh
+  source "${BOOTSTRAP_HOME}/mac_os_x.sh"
   ;;
 *)
   echo "Unknown/Unsupported PLATFORM." >&2
@@ -32,9 +33,9 @@ osx|mac_os_x)
 esac
 
 # Configure /etc/puppet/puppet.conf
-source ./configure.sh
+source "${BOOTSTRAP_HOME}/configure.sh"
 
 # Start the Puppet Agent Service
-source ./service.sh
+source "${BOOTSTRAP_HOME}/service.sh"
 
 echo "Success!!"
