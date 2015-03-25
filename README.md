@@ -28,6 +28,14 @@ rm -rf puppet-bootstrap-master
 sudo puppet agent --test
 ```
 
+### set hostname on OS X (may need this)
+
+```shell
+sudo scutil --set LocalHostName <hostname>
+sudo scutil --set ComputerName <hostname>
+sudo scutil --set HostName <hostname>.miamioh.edu
+```
+
 ## Overview
 
 This repository contains a multitude of single file scripts for setting
