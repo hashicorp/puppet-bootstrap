@@ -2,10 +2,16 @@
 
 ## Usage
 
-### One Line Install/Configure/Start Puppet
+### One Line Install/Configure/Start Puppet (test)
 
 ```shell
 \curl -sSL https://git.io/jLJU | sudo bash
+```
+
+### One Line Install/Configure/Start Puppet (production)
+
+```shell
+\curl -sSL https://git.io/jLJU | sudo bash -s '' production
 ```
 
 ### Advanced Install/Configure/Start Puppet

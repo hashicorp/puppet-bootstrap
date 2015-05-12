@@ -4,12 +4,13 @@
 #
 set -e
 
-PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-"staging"}
+PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-"test"}
 PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 
 case "${PUPPET_ENVIRONMENT}" in
-staging)    PUPPET_SERVER=${PUPPET_SERVER:-"pupt001.projectdragonfly.org"} ;;
-production) PUPPET_SERVER=${PUPPET_SERVER:-"pupp001.projectdragonfly.org"} ;;
+test)       PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt01.mcs.miamioh.edu"} ;;
+staging)    PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt01.mcs.miamioh.edu"} ;;
+production) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp01.mcs.miamioh.edu"} ;;
 *)
   echo "Unknown/Unsupported PUPPET_ENVIRONMENT." >&2
   exit 1
