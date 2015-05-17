@@ -6,8 +6,8 @@ set -e
 
 PUPPET_SERVICE=${PUPPET_SERVICE:-"puppet" # "com.puppetlabs.puppet"}
 
-case "${PUPPET_SERVER}" in
-localhost)
+case "${PUPPET_ENVIRONMENT}" in
+development)
   PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet-apply"}
   PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/puppet apply --parser future /etc/puppet/manifests"}
   ;;
