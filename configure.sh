@@ -67,6 +67,9 @@ cat > /etc/puppet/puppet.conf <<-EOF
     splay = true
     splaylimit = 50m
     # ignorecache = true
+
+[user]
+    environment = ${PUPPET_ENVIRONMENT}
 EOF
 chown root:${PUPPET_ROOT_GROUP} /etc/puppet/puppet.conf
 chmod 0644 /etc/puppet/puppet.conf
