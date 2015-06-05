@@ -33,7 +33,7 @@ if [ -z "${PLATFORM}" ]; then
     elif [ -e /etc/redhat-release ]; then
       etcrh_re=$(cat /etc/redhat-release | grep -Eo "[[:digit:]]*" | awk 'NR==1')
       PLATFORM="centos_${etcrh_re}_x"
-      echo "[Redhat Detected]"
+      echo "[Redhat ${etcrh_re} Detected]"
     fi
     ;;
   esac
