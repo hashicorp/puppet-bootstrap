@@ -7,7 +7,7 @@ set -e
 echo "Initial apt-get update..."
 apt-get update >/dev/null
 
-# Older versions of Debian don't have lsb_release by default, so 
+# Older versions of Debian don't have lsb_release by default, so
 # install that if we have to.
 which lsb_release || apt-get install -y lsb-release
 

@@ -30,6 +30,9 @@ if [ -z "${PLATFORM}" ]; then
         echo "[${lsb_id} ${lsb_re} Detected]"
         ;;
       esac
+    elif [ -e /etc/redhat-release ]; then
+      PLATFORM="centos_${lsb_re}_x"
+      echo "[Redhat Detected]"
     fi
     ;;
   esac
