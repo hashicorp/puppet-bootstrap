@@ -30,6 +30,10 @@ if [ -z "${PLATFORM}" ]; then
         echo "[${lsb_id} ${lsb_re} Detected]"
         ;;
       esac
+    elif [ -e /etc/redhat-release ]; then
+      etcrh_re=$(cat /etc/redhat-release | grep -Eo "[[:digit:]]*" | awk 'NR==1')
+      PLATFORM="centos_${etcrh_re}_x"
+      echo "[Redhat Detected]"
     fi
     ;;
   esac
