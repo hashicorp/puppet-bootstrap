@@ -7,7 +7,6 @@ set -e
 
 BOOTSTRAP_TAR_URL=${BOOTSTRAP_TAR_URL:-"https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz"}
 PLATFORM=${PLATFORM:-$1}
-
 # Attempt to Detect PLATFORM if not set
 if [ -z "${PLATFORM}" ]; then
   case "$(uname -s)" in
@@ -31,7 +30,8 @@ if [ -z "${PLATFORM}" ]; then
         ;;
       esac
     elif [ -e /etc/redhat-release ]; then
-      PLATFORM="centos_${lsb_re}_x"
+      etcrh_re=$(cat /etc/redhat-release | grep -Eo "[[:digit:]]*" | awk 'NR==1')
+      PLATFORM="centos_${etcrh_re}_x"
       echo "[Redhat Detected]"
     fi
     ;;
