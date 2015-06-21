@@ -8,7 +8,8 @@ PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-"test"}
 PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 
 case "${PUPPET_ENVIRONMENT}" in
-development) PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
+dev)         PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
+development) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
 test)        PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
 staging)     PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
 production)  PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
