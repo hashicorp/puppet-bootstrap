@@ -5,7 +5,7 @@
 #
 set -e
 
-BOOTSTRAP_TAR_URL=${BOOTSTRAP_TAR_URL:-"https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz"}
+BOOTSTRAP_TAR_URL=${BOOTSTRAP_TAR_URL:-"https://github.com/MiamiOH/puppet-bootstrap/archive/master.tar.gz"}
 PLATFORM=${PLATFORM:-$1}
 
 # Attempt to Detect PLATFORM if not set

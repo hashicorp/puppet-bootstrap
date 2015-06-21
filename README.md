@@ -5,19 +5,19 @@
 ### One Line Install/Configure/Start Puppet (test)
 
 ```shell
-\curl -sSL https://git.io/jLJU | sudo bash
+\curl -sSL https://git.io/vLD6L | sudo bash
 ```
 
 ### One Line Install/Configure/Start Puppet (production)
 
 ```shell
-\curl -sSL https://git.io/jLJU | sudo bash -s '' production
+\curl -sSL https://git.io/vLD6L | sudo bash -s '' production
 ```
 
 ### Advanced Install/Configure/Start Puppet
 
 ```shell
-curl -L https://github.com/edestecd/puppet-bootstrap/archive/master.tar.gz | tar xzv
+curl -L https://github.com/MiamiOH/puppet-bootstrap/archive/master.tar.gz | tar xzv
 sudo puppet-bootstrap-master/bootstrap.sh osx
 rm -rf puppet-bootstrap-master
 ```
