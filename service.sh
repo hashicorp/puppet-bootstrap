@@ -8,12 +8,12 @@ PUPPET_SERVICE=${PUPPET_SERVICE:-"puppet" # "com.puppetlabs.puppet"}
 
 case "${PUPPET_ENVIRONMENT}" in
 development)
-  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet-apply"}
-  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/puppet apply --parser future /etc/puppet/manifests"}
+  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet"}
+  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/env puppet apply --config /etc/puppet/puppet.conf /etc/puppet/manifests"}
   ;;
 *)
-  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet-agent"}
-  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/puppet agent --onetime --no-daemonize --splay"}
+  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet"}
+  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/env puppet agent --config /etc/puppet/puppet.conf --onetime --no-daemonize"}
   ;;
 esac
 
