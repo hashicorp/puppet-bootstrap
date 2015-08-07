@@ -4,6 +4,7 @@
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
+#   - HIERA_PACKAGE_URL:  The URL to the Hiera package to install.
 #   - PUPPET_PACKAGE_URL: The URL to the Puppet package to install.
 #
 set -e
@@ -11,8 +12,9 @@ set -e
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-2.4.1.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-3.7.4.dmg"}
+FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-latest.dmg"}
+HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-latest.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-latest.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
@@ -51,9 +53,10 @@ function install_dmg() {
   hdiutil eject "${mount_point}" >/dev/null
 }
 
-# Install Puppet and Facter
-install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
+# Install Facter and Hiera and Puppet
 install_dmg "Facter" "${FACTER_PACKAGE_URL}"
+install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
+install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES

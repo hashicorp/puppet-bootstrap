@@ -21,7 +21,7 @@
     This defaults to $null.
 #>
 param(
-   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-3.7.4.msi"
+   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-x64-latest.msi"
   ,[string]$PuppetVersion = $null
 )
 
