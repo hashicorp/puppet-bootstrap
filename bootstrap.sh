@@ -14,6 +14,9 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+# Remove any detected legacy puppet installs
+source "${BOOTSTRAP_HOME}/legacy.sh"
+
 # Install Puppet Using the Puppet Labs Package Repositories
 case "${PLATFORM}" in
 redhat_5|centos_5|centos_5_x) source "${BOOTSTRAP_HOME}/centos_5_x.sh" ;;

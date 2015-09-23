@@ -4,14 +4,17 @@
 #
 set -e
 
+FORCE_LEGACY_ITS_PUPPET=${FORCE_LEGACY_ITS_PUPPET:-""}
+FORCE_LEGACY_DFY_PUPPET=${FORCE_LEGACY_DFY_PUPPET:-""}
+
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
 fi
 
 # IT Services Legacy Puppet installed with rvm
-if [ -e /usr/local/bin/puppetcheckin.sh ]; then
-  echo "[Legacy ITS Puppet found]"
+if [ -e /usr/local/bin/puppetcheckin.sh ] || [ -n "${FORCE_LEGACY_ITS_PUPPET}" ]; then
+  echo "[Legacy ITS Puppet Found]"
 
   # crons
   echo "Removing Cron..."
@@ -23,8 +26,15 @@ if [ -e /usr/local/bin/puppetcheckin.sh ]; then
 
   # preserve old puppet ssl certs, as tivoli and possible other use this
   echo "Preserving legacy SSL (in /var/lib/puppet/ssl_legacy)..."
-  echo "You probably want to edit anything using this (/etc/init.d/tivoli)"
-  mv /var/lib/puppet/ssl /var/lib/puppet/ssl_legacy
+  if [ ! -e /var/lib/puppet/ssl_legacy ]; then
+    mv /var/lib/puppet/ssl /var/lib/puppet/ssl_legacy
+  fi
+  if [ -e /etc/init.d/tivoli ]; then
+    echo "Editing to reflect legacy SSL/facter location (/etc/init.d/tivoli)"
+    sed -i 's~/usr/local/bin/facter~/usr/bin/facter~g' /etc/init.d/tivoli
+    sed -i 's~/var/lib/puppet/ssl/~/var/lib/puppet/ssl_legacy/~g' /etc/init.d/tivoli
+  fi
+  echo "You probably want to edit anything else using Legacy SSL/facter..."
 
   # binaries/scripts/config/etc
   echo "Removing Files (in /usr/local/bin/ /etc/sysconfig/)..."
@@ -32,8 +42,8 @@ if [ -e /usr/local/bin/puppetcheckin.sh ]; then
 fi
 
 # Dragonfly Legacy Puppet installed with rvm
-if [ -e /usr/local/dragonfly/puppet ]; then
-  echo "[Legacy Dragonfly Puppet found]"
+if [ -e /usr/local/dragonfly/puppet ] || [ -n "${FORCE_LEGACY_DFY_PUPPET}" ]; then
+  echo "[Legacy Dragonfly Puppet Found]"
 
   # crons
   echo "Removing Cron..."
