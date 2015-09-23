@@ -10,8 +10,8 @@ PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 case "${PUPPET_ENVIRONMENT}" in
 dev)         PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
 development) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
-test)        PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
-staging)     PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
+test)        PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
+staging)     PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
 production)  PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
 *)
   echo "Unknown/Unsupported PUPPET_ENVIRONMENT." >&2
