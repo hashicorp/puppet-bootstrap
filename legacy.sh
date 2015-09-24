@@ -12,6 +12,15 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+if hash rvm 2>/dev/null; then
+  echo "[RVM Found]"
+  echo "Clearing rvm default and using system ruby..."
+  rvm alias delete default
+  rvm use system
+
+  echo ""
+fi
+
 # IT Services Legacy Puppet installed with rvm
 if [ -e /usr/local/bin/puppetcheckin.sh ] || [ -n "${FORCE_LEGACY_ITS_PUPPET}" ]; then
   echo "[Legacy ITS Puppet Found]"
@@ -39,6 +48,8 @@ if [ -e /usr/local/bin/puppetcheckin.sh ] || [ -n "${FORCE_LEGACY_ITS_PUPPET}" ]
   # binaries/scripts/config/etc
   echo "Removing Files (in /usr/local/bin/ /etc/sysconfig/)..."
   rm -rf /usr/local/bin/facter* /usr/local/bin/puppetcheckin*.sh* /etc/sysconfig/puppet
+
+  echo ""
 fi
 
 # Dragonfly Legacy Puppet installed with rvm
@@ -58,4 +69,6 @@ if [ -e /usr/local/dragonfly/puppet ] || [ -n "${FORCE_LEGACY_DFY_PUPPET}" ]; th
   # binaries/scripts/config/etc
   echo "Removing Files (in /usr/local/dragonfly/puppet/)..."
   rm -rf /usr/local/dragonfly/puppet
+
+  echo ""
 fi
