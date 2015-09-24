@@ -16,7 +16,8 @@ if hash rvm 2>/dev/null; then
   echo "[RVM Found]"
   echo "Clearing rvm default and using system ruby..."
   rvm alias delete default
-  rvm use system
+  unset GEM_HOME IRBRC MY_RUBY_HOME GEM_PATH RUBY_VERSION
+  export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/rvm/bin
 
   echo ""
 fi
