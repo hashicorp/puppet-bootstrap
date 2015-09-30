@@ -7,7 +7,7 @@ set -e
 PUPPET_SERVICE=${PUPPET_SERVICE:-"puppet" # "com.puppetlabs.puppet"}
 
 case "${PUPPET_ENVIRONMENT}" in
-dev)
+locdev)
   PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet"}
   PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/env puppet apply --config /etc/puppet/puppet.conf /etc/puppet/manifests"}
   ;;
