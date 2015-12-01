@@ -16,6 +16,11 @@ if which puppet > /dev/null 2>&1; then
   exit 0
 fi
 
+# Install wget
+echo "Installing wget..."
+yum install -y wget > /dev/null
+
+
 # Install puppet labs repo
 echo "Configuring PuppetLabs repo..."
 repo_path=$(mktemp)
