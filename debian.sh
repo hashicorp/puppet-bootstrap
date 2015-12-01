@@ -9,7 +9,7 @@ apt-get update >/dev/null
 
 # Older versions of Debian don't have lsb_release by default, so 
 # install that if we have to.
-which lsb_release || apt-get install -y lsb-release
+which lsb_release || apt-get --yes install lsb-release
 
 # Load up the release information
 DISTRIB_CODENAME=$(lsb_release -c -s)
@@ -19,14 +19,14 @@ REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.d
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
 #--------------------------------------------------------------------
-if [ "$EUID" -ne "0" ]; then
+if [ "$EUID" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
 fi
 
 # Install wget if we have to (some older Debian versions)
 echo "Installing wget..."
-apt-get install -y wget >/dev/null
+apt-get --yes install wget >/dev/null
 
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
