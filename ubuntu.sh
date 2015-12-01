@@ -17,7 +17,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-if which puppet > /dev/null 2>&1 -a apt-cache policy | grep --quiet apt.puppetlabs.com; then
+if which puppet > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
   echo "Puppet is already installed."
   exit 0
 fi
