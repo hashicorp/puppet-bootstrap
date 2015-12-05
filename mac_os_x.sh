@@ -13,7 +13,7 @@ set -e
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
 FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-2.4.4.dmg"}
-HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-latest.dmg"}
+#HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-latest.dmg"}
 PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-latest.dmg"}
 
 #--------------------------------------------------------------------
@@ -55,7 +55,8 @@ function install_dmg() {
 
 # Install Facter and Hiera and Puppet
 install_dmg "Facter" "${FACTER_PACKAGE_URL}"
-install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
+#install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
+gem install hiera -v '~> 1.0' --no-ri --no-rdoc
 install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
