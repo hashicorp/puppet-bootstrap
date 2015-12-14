@@ -19,7 +19,7 @@ REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.d
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
 #--------------------------------------------------------------------
-if [ "$EUID" != "0" ]; then
+if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
 fi
