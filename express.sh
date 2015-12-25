@@ -21,7 +21,7 @@ if [ -z "${PLATFORM}" ]; then
       lsb_id=$(lsb_release -is)
       lsb_re=$(lsb_release -rs | cut -f1 -d'.')
       case "${lsb_id}" in
-      OracleServer|EnterpriseEnterpriseServer)
+      RedHatEnterpriseServer|OracleServer|EnterpriseEnterpriseServer)
         PLATFORM="centos_${lsb_re}_x"
         echo "[${lsb_id} ${lsb_re} Detected]"
         ;;
