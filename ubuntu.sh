@@ -2,12 +2,18 @@
 #
 # This bootstraps Puppet on Ubuntu 12.04 LTS.
 #
+# To try puppet 4 -->  PUPPET_COLLECTION=pc1 ./ubuntu.sh
+#
 set -e
 
 # Load up the release information
 . /etc/lsb-release
 
-REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.deb"
+# if PUPPET_COLLECTION is not prepended with a dash "-", add it
+[[ "${PUPPET_COLLECTION}" == "" ]] || [[ "${PUPPET_COLLECTION:0:1}" == "-" ]] || \
+  PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
+
+REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
