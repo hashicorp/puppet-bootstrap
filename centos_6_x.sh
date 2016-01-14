@@ -25,5 +25,6 @@ rpm -i "${repo_path}" >/dev/null
 # Install Puppet...
 echo "Installing puppet"
 yum install -y puppet > /dev/null
+yum update -y puppet augeas-libs ruby-augeas > /dev/null
 
 echo "Puppet installed!"
