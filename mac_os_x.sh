@@ -54,12 +54,15 @@ function install_dmg() {
 }
 
 # Install Facter and Hiera and Puppet
-# gem install facter -v '~> 2.0' --no-ri --no-rdoc
-# gem install hiera -v '~> 1.0' --no-ri --no-rdoc
-# gem install puppet -v '~> 3.0' --no-ri --no-rdoc
-install_dmg "Facter" "${FACTER_PACKAGE_URL}"
-install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
-install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
+echo "Installing: facter from gem"
+gem install facter -v '~> 2.0' --no-ri --no-rdoc
+echo "Installing: hiera from gem"
+gem install hiera -v '~> 1.0' --no-ri --no-rdoc
+echo "Installing: puppet from gem"
+gem install puppet -v '~> 3.0' --no-ri --no-rdoc
+# install_dmg "Facter" "${FACTER_PACKAGE_URL}"
+# install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
+# install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
