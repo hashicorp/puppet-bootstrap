@@ -50,10 +50,12 @@ DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -
 
 echo "Puppet installed!"
 
-# Install RubyGems for the provider
-echo "Installing RubyGems..."
+# Install RubyGems for the provider, unless using puppet collections
 if [ "$DISTRIB_CODENAME" != "trusty" ]; then
+  echo "Installing RubyGems..."
   apt-get --yes install rubygems >/dev/null
 fi
-gem install --no-ri --no-rdoc rubygems-update
-update_rubygems >/dev/null
+if [[ "${PUPPET_COLLECTION}" == "" ]]; then
+  gem install --no-ri --no-rdoc rubygems-update
+  update_rubygems >/dev/null
+fi
