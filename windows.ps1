@@ -41,7 +41,7 @@ switch ($PuppetEnvironment) {
   staging     { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
   production  { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
   default     {
-    Write-Host "Unknown/Unsupported PuppetEnvironment."
+    Write-Error "Unknown/Unsupported PuppetEnvironment."
     Exit 1
   }
 }
