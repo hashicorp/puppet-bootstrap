@@ -91,7 +91,7 @@ if (!($PuppetInstalled)) {
     vardir = C:\ProgramData\PuppetLabs\puppet\var\lib
     logdir = C:\ProgramData\PuppetLabs\puppet\var\log
     rundir = C:\ProgramData\PuppetLabs\puppet\var\run
-    ssldir = \$vardir/ssl
+    ssldir = `$vardir/ssl
 
 [agent]
     pluginsync      = true
