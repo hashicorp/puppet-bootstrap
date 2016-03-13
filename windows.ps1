@@ -82,31 +82,31 @@ if (!($PuppetInstalled)) {
   Write-Host "Puppet successfully installed."
 
   Write-Host "Configuring Puppet..."
-  @"
-  ### File placed by puppet-bootstrap ###
-  ## https://docs.puppetlabs.com/references/3.stable/configuration.html
-  #
+@"
+### File placed by puppet-bootstrap ###
+## https://docs.puppetlabs.com/references/3.stable/configuration.html
+#
 
-  [main]
-      vardir = C:\ProgramData\PuppetLabs\puppet\var\lib
-      logdir = C:\ProgramData\PuppetLabs\puppet\var\log
-      rundir = C:\ProgramData\PuppetLabs\puppet\var\run
-      ssldir = \$vardir/ssl
+[main]
+    vardir = C:\ProgramData\PuppetLabs\puppet\var\lib
+    logdir = C:\ProgramData\PuppetLabs\puppet\var\log
+    rundir = C:\ProgramData\PuppetLabs\puppet\var\run
+    ssldir = \$vardir/ssl
 
-  [agent]
-      pluginsync      = true
-      report          = true
-      ignoreschedules = true
-      daemon          = false
-      ca_server       = $PuppetServer
-      certname        = $PuppetCertname
-      environment     = $PuppetEnvironment
-      server          = $PuppetServer
+[agent]
+    pluginsync      = true
+    report          = true
+    ignoreschedules = true
+    daemon          = false
+    ca_server       = $PuppetServer
+    certname        = $PuppetCertname
+    environment     = $PuppetEnvironment
+    server          = $PuppetServer
 
-  [user]
-      environment = $PuppetEnvironment
-      parser      = future
-  "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
+[user]
+    environment = $PuppetEnvironment
+    parser      = future
+"@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
 
   Write-Host "Success!!"
 }
