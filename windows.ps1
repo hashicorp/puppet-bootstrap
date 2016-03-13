@@ -111,7 +111,7 @@ if (!($PuppetInstalled)) {
 [user]
     environment = $PuppetEnvironment
     parser      = future
-"@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
+"@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
   Write-Host "Starting Puppet ScheduledTask..."
   $action = New-ScheduledTaskAction -Execute $PuppetCmd
