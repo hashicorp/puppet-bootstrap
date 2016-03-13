@@ -115,8 +115,8 @@ if (!($PuppetInstalled)) {
 
   Write-Host "Starting Puppet ScheduledTask..."
   $action = New-ScheduledTaskAction -Execute $PuppetCmd
-  $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
-  Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "puppet"
+  $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
+  Register-ScheduledTask -TaskName "puppet" -Action $action -Trigger $trigger -User "Administrator"
 
   Write-Host "Success!!"
 }
