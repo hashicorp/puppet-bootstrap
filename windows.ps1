@@ -46,6 +46,11 @@ switch ($PuppetEnvironment) {
   }
 }
 
+switch ($PuppetEnvironment) {
+  locdev  { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf C:\ProgramData\PuppetLabs\puppet\etc\manifests" }
+  default { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
+}
+
 $PuppetInstalled = $false
 try {
   $ErrorActionPreference = "Stop";
@@ -107,6 +112,11 @@ if (!($PuppetInstalled)) {
     environment = $PuppetEnvironment
     parser      = future
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
+
+  Write-Host "Starting Puppet ScheduledTask..."
+  $action = New-ScheduledTaskAction -Execute $PuppetCmd
+  $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
+  Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "puppet"
 
   Write-Host "Success!!"
 }
