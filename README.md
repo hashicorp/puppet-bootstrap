@@ -14,10 +14,15 @@
 \curl -sSL https://git.io/vLD6L | sudo bash -s '' production
 ```
 
-### One Line Install/Configure/Start Puppet (Windows PowerShell)
+### One Line Install/Configure/Start Puppet (Windows)
 
 ```shell
-(Invoke-WebRequest -UseBasicParsing https://git.io/vanax).Content | PowerShell -Command -
+# PowerShell
+iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
+```
+```shell
+# cmd.exe
+@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))"
 ```
 
 ### Advanced Install/Configure/Start Puppet

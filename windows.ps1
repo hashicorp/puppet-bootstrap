@@ -23,11 +23,27 @@
 param(
    [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-x64-latest.msi"
   ,[string]$PuppetVersion = "null"
+  ,[string]$PuppetCertname = $env:computername
+  ,[string]$PuppetEnvironment = "locdev"
 )
 
 if ($PuppetVersion -ne "null") {
   $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-$($PuppetVersion).msi"
   Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
+}
+
+switch ($PuppetEnvironment) {
+  locdev      { $PuppetServer = "localhost" }
+  esodev      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
+  esotst      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
+  development { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+  test        { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+  staging     { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+  production  { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+  default     {
+    Write-Host "Unknown/Unsupported PuppetEnvironment."
+    Exit 1
+  }
 }
 
 $PuppetInstalled = $false
@@ -61,7 +77,36 @@ if (!($PuppetInstalled)) {
   # Stop the service that it autostarts
   Write-Host "Stopping Puppet service that is running by default..."
   Start-Sleep -s 5
-  Stop-Service -Name puppet
+  Set-Service -Name puppet -StartupType Disabled -Status Stopped
 
   Write-Host "Puppet successfully installed."
+
+  Write-Host "Configuring Puppet..."
+  @"
+  ### File placed by puppet-bootstrap ###
+  ## https://docs.puppetlabs.com/references/3.stable/configuration.html
+  #
+
+  [main]
+      vardir = C:\ProgramData\PuppetLabs\puppet\var\lib
+      logdir = C:\ProgramData\PuppetLabs\puppet\var\log
+      rundir = C:\ProgramData\PuppetLabs\puppet\var\run
+      ssldir = \$vardir/ssl
+
+  [agent]
+      pluginsync      = true
+      report          = true
+      ignoreschedules = true
+      daemon          = false
+      ca_server       = $PuppetServer
+      certname        = $PuppetCertname
+      environment     = $PuppetEnvironment
+      server          = $PuppetServer
+
+  [user]
+      environment = $PuppetEnvironment
+      parser      = future
+  "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
+
+  Write-Host "Success!!"
 }
