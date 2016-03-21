@@ -67,8 +67,14 @@ if [ -e /usr/local/dragonfly/puppet ] || [ -n "${FORCE_LEGACY_DFY_PUPPET}" ]; th
   grep -v '/usr/local/dragonfly/puppet/bin/puppet-agent' |
   crontab -u root -
 
+  if [ -e /etc/profile.d/http_proxy.sh ]; then
+    echo "Removing legacy proxy profile (/etc/profile.d/http_proxy.sh)"
+    rm -rf /etc/profile.d/http_proxy.sh
+  fi
+
   # binaries/scripts/config/etc
   echo "Removing Files (in /usr/local/dragonfly/puppet/)..."
+  rm -rf /usr/local/dragonfly/bin/filebucket-find /usr/local/dragonfly/bin/puppet-agent
   rm -rf /usr/local/dragonfly/puppet
 
   echo ""
