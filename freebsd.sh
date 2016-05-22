@@ -4,7 +4,7 @@ set -e
 
 # This bootstraps Puppet on FreeBSD
 
-if [ `sysctl -n kern.osreldate` -ge '90100' ] && pkg -N 2> /dev/null ; then
+if [ `sysctl -n kern.osreldate` -ge '901000' ] && pkg -N 2> /dev/null ; then
   have_pkg=true;
 else
   have_pkg=false;
