@@ -12,28 +12,20 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = 'Microsoft/EdgeOnWindows10'
-  config.vm.hostname = 'bootstrap.itapps.miamioh.edu'
-
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
-
-  config.ssh.username = 'IEUser'
-  config.ssh.password = 'Passw0rd!'
-  config.ssh.sudo_command = ''
+  config.vm.box = 'opentable/win-2012r2-standard-amd64-nocm'
+  config.vm.hostname = 'bootstrap'
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network 'forwarded_port', :host => 33_389, :guest => 3389,
+  #                                    :id => 'rdp', :auto_correct => true
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   # config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.network 'forwarded_port', host: 33_389, guest: 3389,
-                                      id: 'rdp', auto_correct: true
+  config.vm.network 'private_network', :type => 'dhcp'
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -51,18 +43,16 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
   config.vm.provider 'virtualbox' do |vb|
-    vb.name = 'bootstrap-Windows-10'
+    vb.name = 'bootstrap-win-2012r2-standard'
     # Display the VirtualBox GUI when booting the machine
     vb.gui = true
     vb.memory = 2048
     vb.cpus = 2
   end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
+  # Provision with Shell to install puppet
+  config.vm.provision 'shell', :inline => <<-SHELL
+    $env:PuppetEnvironment = "vagrant"
+    iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
+  SHELL
 end
