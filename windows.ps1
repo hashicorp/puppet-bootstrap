@@ -19,12 +19,20 @@
 .PARAMETER PuppetVersion
     This is the version of Puppet that you want to install. If you pass this it will override the version in the MsiUrl.
     This defaults to $null.
+
+.PARAMETER PuppetCertname
+    The certname to use for this puppet agent.
+    This defaults to $env:computername.
+
+.PARAMETER PuppetEnvironment
+    The environment to use for this puppet agent.
+    This defaults to "test".
 #>
 param(
    [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-x64-latest.msi"
   ,[string]$PuppetVersion = "null"
   ,[string]$PuppetCertname = $env:computername
-  ,[string]$PuppetEnvironment = "locdev"
+  ,[string]$PuppetEnvironment = $env:PuppetEnvironment
 )
 
 if ($PuppetVersion -ne "null") {
@@ -32,8 +40,10 @@ if ($PuppetVersion -ne "null") {
   Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
 }
 
+if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
 switch ($PuppetEnvironment) {
   locdev      { $PuppetServer = "localhost" }
+  vagrant     { $PuppetServer = "localhost" }
   esodev      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
   esotst      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
   development { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
@@ -86,7 +96,8 @@ if (!($PuppetInstalled)) {
 
   Write-Host "Puppet successfully installed."
 
-  Write-Host "Configuring Puppet..."
+  if ($PuppetEnvironment -ne "vagrant") {
+    Write-Host "Configuring Puppet..."
 @"
 ### File placed by puppet-bootstrap ###
 ## https://docs.puppetlabs.com/references/3.stable/configuration.html
@@ -113,10 +124,11 @@ if (!($PuppetInstalled)) {
     parser      = future
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
-  Write-Host "Starting Puppet ScheduledTask..."
-  $action = New-ScheduledTaskAction -Execute $PuppetCmd
-  $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
-  Register-ScheduledTask -TaskName "puppet" -Action $action -Trigger $trigger -User "Administrator"
+    Write-Host "Starting Puppet ScheduledTask..."
+    $action = New-ScheduledTaskAction -Execute $PuppetCmd
+    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
+    Register-ScheduledTask -TaskName "puppet" -Action $action -Trigger $trigger -User "Administrator"
+  }
 
   Write-Host "Success!!"
 }
