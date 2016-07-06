@@ -48,6 +48,7 @@ Vagrant.configure(2) do |config|
     vb.gui = true
     vb.memory = 2048
     vb.cpus = 2
+    vb.customize ['modifyvm', :id, '--ioapic', 'on']
   end
 
   # Provision with Shell to install puppet
