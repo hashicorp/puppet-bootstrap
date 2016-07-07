@@ -76,16 +76,20 @@ try {
 if (!($PuppetInstalled)) {
   $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
   if (! ($currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))) {
-    Write-Host -ForegroundColor Red "You must run this script as an administrator."
+    Write-Error "You must run this script as an administrator."
     Exit 1
   }
 
-  # Install it - msiexec will download from the url
-  $install_args = @("/qn", "/norestart","/i", $MsiUrl)
-  Write-Host "Installing Puppet. Running msiexec.exe $install_args"
-  $process = Start-Process -FilePath msiexec.exe -ArgumentList $install_args -Wait -PassThru
+  # Install chocolatey
+  Write-Host "Installing Chocolatey"
+  iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+
+  # Install it - use chocolatey
+  $install_args = @("install", "puppet", "-y")
+  Write-Host "Installing Puppet. Running choco.exe $install_args"
+  $process = Start-Process -FilePath choco.exe -ArgumentList $install_args -Wait -PassThru
   if ($process.ExitCode -ne 0) {
-    Write-Host "Installer failed."
+    Write-Error "Installer failed."
     Exit 1
   }
 
