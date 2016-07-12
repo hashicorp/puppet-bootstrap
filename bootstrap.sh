@@ -35,10 +35,12 @@ osx|mac_os_x)
   exit 1
 esac
 
-# Configure /etc/puppet/puppet.conf
-source "${BOOTSTRAP_HOME}/configure.sh"
+if [ "${PUPPET_ENVIRONMENT}" != "vagrant" ]; then
+  # Configure /etc/puppet/puppet.conf
+  source "${BOOTSTRAP_HOME}/configure.sh"
 
-# Start the Puppet Agent Service
-source "${BOOTSTRAP_HOME}/service.sh"
+  # Start the Puppet Agent Service
+  source "${BOOTSTRAP_HOME}/service.sh"
+fi
 
 echo "Success!!"

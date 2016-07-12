@@ -10,6 +10,7 @@ PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 
 case "${PUPPET_ENVIRONMENT}" in
 locdev)      PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
+vagrant)     PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
 esodev)      PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
 esotst)      PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
 development) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
