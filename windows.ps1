@@ -30,12 +30,12 @@
 #>
 param(
    [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-x64-latest.msi"
-  ,[string]$PuppetVersion = "null"
+  ,[string]$PuppetVersion = $null
   ,[string]$PuppetCertname = $env:computername
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
 )
 
-if ($PuppetVersion -ne "null") {
+if ($PuppetVersion) {
   $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-$($PuppetVersion).msi"
   Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
 }

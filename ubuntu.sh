@@ -2,12 +2,19 @@
 #
 # This bootstraps Puppet on Ubuntu 12.04 LTS.
 #
+# To try puppet 4 -->  PUPPET_COLLECTION=pc1 ./ubuntu.sh
+#
 set -e
 
 # Load up the release information
 . /etc/lsb-release
 
-REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.deb"
+# if PUPPET_COLLECTION is not prepended with a dash "-", add it
+[[ "${PUPPET_COLLECTION}" == "" ]] || [[ "${PUPPET_COLLECTION:0:1}" == "-" ]] || \
+  PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
+[[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
+
+REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
@@ -17,7 +24,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-if which puppet > /dev/null 2>&1 -a apt-cache policy | grep --quiet apt.puppetlabs.com; then
+if which puppet > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
   echo "Puppet is already installed."
   exit 0
 fi
@@ -28,7 +35,7 @@ apt-get update >/dev/null
 
 # Install wget if we have to (some older Ubuntu versions)
 echo "Installing wget..."
-apt-get install -y wget >/dev/null
+apt-get --yes install wget >/dev/null
 
 # Install the PuppetLabs repo
 echo "Configuring PuppetLabs repo..."
@@ -39,14 +46,16 @@ apt-get update >/dev/null
 
 # Install Puppet
 echo "Installing Puppet..."
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet >/dev/null
+DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install ${PINST} >/dev/null
 
 echo "Puppet installed!"
 
-# Install RubyGems for the provider
-echo "Installing RubyGems..."
-if [ $DISTRIB_CODENAME != "trusty" ]; then
-  apt-get install -y rubygems >/dev/null
+# Install RubyGems for the provider, unless using puppet collections
+if [ "$DISTRIB_CODENAME" != "trusty" ]; then
+  echo "Installing RubyGems..."
+  apt-get --yes install rubygems >/dev/null
 fi
-gem install --no-ri --no-rdoc rubygems-update
-update_rubygems >/dev/null
+if [[ "${PUPPET_COLLECTION}" == "" ]]; then
+  gem install --no-ri --no-rdoc rubygems-update
+  update_rubygems >/dev/null
+fi

@@ -1,30 +1,25 @@
 #!/usr/bin/env bash
-# This bootstraps Puppet on CentOS 6.x
-# It has been tested on CentOS 6.4 64bit
+# Bootstrap Puppet on CentOS 6.x
+# Tested on CentOS 6.5 64bit
 
 set -e
 
-REPO_URL="https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
+PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm"
 
-if [ "$EUID" -ne "0" ]; then
-  echo "This script must be run as root." >&2
+if [ "${EUID}" -ne "0" ]; then
+  /bin/echo "This script must be run as root." >&2
   exit 1
-fi
-
-if which puppet > /dev/null 2>&1; then
-  echo "Puppet is already installed."
+elif /usr/bin/which puppet > /dev/null 2>&1; then
+  /bin/echo "Puppet is already installed."
   exit 0
 fi
 
-# Install puppet labs repo
-echo "Configuring PuppetLabs repo..."
-repo_path=$(mktemp)
-curl -L -o "${repo_path}" "${REPO_URL}" 2>/dev/null
-rpm -i "${repo_path}" >/dev/null
+# Install Puppet Labs repo
+/bin/echo "Configuring PuppetLabs repo..."
+/bin/rpm --quiet -i "${PUPPETLABS_RELEASE_RPM}"
 
-# Install Puppet...
-echo "Installing puppet"
-yum install -y puppet > /dev/null
-yum update -y puppet augeas-libs ruby-augeas > /dev/null
+# Install Puppet
+/bin/echo "Installing Puppet..."
+/usr/bin/yum install -q -y puppet
 
-echo "Puppet installed!"
+/bin/echo "Puppet installed!"

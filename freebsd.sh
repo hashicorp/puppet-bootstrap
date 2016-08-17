@@ -1,15 +1,11 @@
 #!/usr/bin/env sh
 
+set -e
+
 # This bootstraps Puppet on FreeBSD
-
-have_pkg=`grep -sc '^WITH_PKGNG' /etc/make.conf`
-
 echo "Installing Puppet & dependencies..."
-if [ "$have_pkg" = 1 ]
-then
-	export ASSUME_ALWAYS_YES=yes
-	pkg install sysutils/puppet
-	unset ASSUME_ALWAYS_YES
+if [ `sysctl -n kern.osreldate` -ge '901000' ] && pkg -N 2> /dev/null ; then
+	pkg install -y "sysutils/puppet4"
 else
 	pkg_add -r puppet
 fi
