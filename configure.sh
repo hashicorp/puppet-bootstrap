@@ -48,10 +48,13 @@ cat > /etc/puppet/puppet.conf <<-EOF
     certname        = ${PUPPET_CERTNAME}
     environment     = ${PUPPET_ENVIRONMENT}
     server          = ${PUPPET_SERVER}
+    stringify_facts = false
 
 [user]
-    environment = ${PUPPET_ENVIRONMENT}
-    parser      = future
+    environment     = ${PUPPET_ENVIRONMENT}
+    parser          = future
+    stringify_facts = false
+    ordering        = manifest
 EOF
 chown root:${PUPPET_ROOT_GROUP} /etc/puppet/puppet.conf
 chmod 0644 /etc/puppet/puppet.conf

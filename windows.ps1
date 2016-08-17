@@ -122,10 +122,13 @@ if (!($PuppetInstalled)) {
     certname        = $PuppetCertname
     environment     = $PuppetEnvironment
     server          = $PuppetServer
+    stringify_facts = false
 
 [user]
-    environment = $PuppetEnvironment
-    parser      = future
+    environment     = $PuppetEnvironment
+    parser          = future
+    stringify_facts = false
+    ordering        = manifest
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
     Write-Host "Starting Puppet ScheduledTask..."
