@@ -21,9 +21,13 @@ PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
 #--------------------------------------------------------------------
+PATH="/opt/puppetlabs/bin:${PATH}"
 if [ "${EUID}" -ne "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
+elif which puppet > /dev/null 2>&1; then
+  echo "Puppet $(puppet --version) is already installed."
+  exit 0
 fi
 
 # This function will download a DMG from a URL, mount it, find
