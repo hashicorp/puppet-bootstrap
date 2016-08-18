@@ -22,9 +22,7 @@ REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
-fi
-
-if which puppet > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
+elif which puppet > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
   echo "Puppet is already installed."
   exit 0
 fi

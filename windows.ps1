@@ -12,12 +12,12 @@
 
       powershell.exe -ExecutionPolicy Unrestricted -NoLogo -NoProfile -Command "& '.\windows.ps1'"
 
-.PARAMETER MsiUrl
-    This is the URL to the Puppet MSI file you want to install. This defaults
-    to a version from PuppetLabs.
+.PARAMETER PuppetPackage
+    This is the Chocolatey Package you want to install.
+    This defaults to puppet (puppet 3.x).
 
-.PARAMETER PuppetVersion
-    This is the version of Puppet that you want to install. If you pass this it will override the version in the MsiUrl.
+.PARAMETER PuppetCollection
+    This is the Collection of Puppet that you want to install. If you pass this it will override the PuppetPackage.
     This defaults to $null.
 
 .PARAMETER PuppetCertname
@@ -29,15 +29,15 @@
     This defaults to "test".
 #>
 param(
-   [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-x64-latest.msi"
-  ,[string]$PuppetVersion = $null
+   [string]$PuppetPackage = "puppet"
+  ,[string]$PuppetCollection = $env:PuppetCollection
   ,[string]$PuppetCertname = $env:computername
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
 )
 
-if ($PuppetVersion) {
-  $MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-$($PuppetVersion).msi"
-  Write-Host "Puppet version $PuppetVersion specified, updated MsiUrl to `"$MsiUrl`""
+if ($PuppetCollection) {
+  $PuppetPackage = "puppet-agent"
+  Write-Host "Puppet Collection $PuppetCollection specified, updated PuppetPackage to `"$PuppetPackage`""
 }
 
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
@@ -85,7 +85,7 @@ if (!($PuppetInstalled)) {
   iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
   # Install it - use chocolatey
-  $install_args = @("install", "puppet", "-y")
+  $install_args = @("install", $PuppetPackage, "-y")
   Write-Host "Installing Puppet. Running choco.exe $install_args"
   $process = Start-Process -FilePath choco.exe -ArgumentList $install_args -Wait -PassThru
   if ($process.ExitCode -ne 0) {

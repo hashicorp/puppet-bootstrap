@@ -7,7 +7,8 @@ set -e
 BOOTSTRAP_HOME=${BOOTSTRAP_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
 PLATFORM=${PLATFORM:-$1}
 PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-$2}
-PUPPET_SERVER=${PUPPET_SERVER:-$3}
+PUPPET_COLLECTION=${PUPPET_COLLECTION:-$3}
+PUPPET_SERVER=${PUPPET_SERVER:-$4}
 
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2

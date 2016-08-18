@@ -16,10 +16,12 @@ FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/f
 HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-latest.dmg"}
 PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-latest.dmg"}
 
+PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/10.11/PC1/x86_64/puppet-agent-1.6.0-1.osx10.11.dmg"}
+
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
 #--------------------------------------------------------------------
-if [ "$EUID" -ne "0" ]; then
+if [ "${EUID}" -ne "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
 fi
@@ -53,16 +55,20 @@ function install_dmg() {
   hdiutil eject "${mount_point}" >/dev/null
 }
 
-# Install Facter and Hiera and Puppet
-echo "Installing: facter from gem"
-gem install facter -v '~> 2.0' --no-ri --no-rdoc
-echo "Installing: hiera from gem"
-gem install hiera -v '~> 1.0' --no-ri --no-rdoc
-echo "Installing: puppet from gem"
-gem install puppet -v '~> 3.0' --no-ri --no-rdoc
-# install_dmg "Facter" "${FACTER_PACKAGE_URL}"
-# install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
-# install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
+if [[ "${PUPPET_COLLECTION}" == "" ]]; then
+  # Install Facter and Hiera and Puppet
+  echo "Installing: facter from gem"
+  gem install facter -v '~> 2.0' --no-ri --no-rdoc
+  echo "Installing: hiera from gem"
+  gem install hiera -v '~> 1.0' --no-ri --no-rdoc
+  echo "Installing: puppet from gem"
+  gem install puppet -v '~> 3.0' --no-ri --no-rdoc
+  # install_dmg "Facter" "${FACTER_PACKAGE_URL}"
+  # install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
+  # install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
+else
+  install_dmg "puppet-agent" "${PUPPET_COLLECTION_URL}"
+fi
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
