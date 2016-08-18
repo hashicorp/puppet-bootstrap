@@ -42,6 +42,8 @@ echo "Configuring PuppetLabs repo..."
 repo_deb_path=$(mktemp)
 wget --output-document="${repo_deb_path}" "${REPO_DEB_URL}" 2>/dev/null
 dpkg -i "${repo_deb_path}" >/dev/null
+rm "${repo_deb_path}"
+
 apt-get update >/dev/null
 
 # Install Puppet
