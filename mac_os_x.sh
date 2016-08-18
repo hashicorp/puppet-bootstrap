@@ -63,6 +63,8 @@ if [[ "${PUPPET_COLLECTION}" == "" ]]; then
   gem install hiera -v '~> 1.0' --no-ri --no-rdoc
   echo "Installing: puppet from gem"
   gem install puppet -v '~> 3.0' --no-ri --no-rdoc
+  mkdir -p /var/lib/puppet /etc/puppet
+  touch /etc/puppet/puppet.conf
   # install_dmg "Facter" "${FACTER_PACKAGE_URL}"
   # install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
   # install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
