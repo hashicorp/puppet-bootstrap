@@ -14,8 +14,9 @@ PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release${PUPPET_CO
 if [ "${EUID}" -ne "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
-elif which puppet > /dev/null 2>&1; then
-  echo "Puppet is already installed."
+elif rpm --quiet -q ${PINST}; then
+  PATH="/opt/puppetlabs/bin:${PATH}"
+  echo "Puppet $(puppet --version) is already installed."
   exit 0
 fi
 
