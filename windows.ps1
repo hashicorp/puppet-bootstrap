@@ -35,6 +35,8 @@ param(
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
 )
 
+Import-Module ScheduledTasks
+
 if ($PuppetCollection) {
   $PuppetPackage = "puppet-agent"
   Write-Host "Puppet Collection $PuppetCollection specified, updated PuppetPackage to `"$PuppetPackage`""
@@ -85,7 +87,7 @@ if (!($PuppetInstalled)) {
   iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
   # Install it - use chocolatey
-  $install_args = @("install", $PuppetPackage, "-y")
+  $install_args = @("install", $PuppetPackage, "-y", "--allow-empty-checksums")
   Write-Host "Installing Puppet. Running choco.exe $install_args"
   $process = Start-Process -FilePath choco.exe -ArgumentList $install_args -Wait -PassThru
   if ($process.ExitCode -ne 0) {
