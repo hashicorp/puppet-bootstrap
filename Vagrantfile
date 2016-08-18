@@ -92,10 +92,11 @@ Vagrant.configure(2) do |config|
     case kernel.to_s
     when 'unix'
       os.vm.provision 'shell', :inline => <<-SHELL
-        curl -sSL https://git.io/vLD6L | sudo bash -s '' locdev
+        curl -sSL https://git.io/vLD6L | sudo bash -s '' locdev pc1
       SHELL
     when 'windows'
       os.vm.provision 'shell', :inline => <<-SHELL
+        $env:PuppetCollection = "pc1"
         $env:PuppetEnvironment = "locdev"
         iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
       SHELL

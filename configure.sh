@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Configure /etc/puppet/puppet.conf
+# Configure puppet.conf
 #
 set -e
 
@@ -27,17 +27,40 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+if [[ "${PUPPET_COLLECTION}" == "" ]]; then
+  PCONF="/etc/puppet/puppet.conf"
+  var_dir='/var/lib/puppet'
+  log_dir='/var/log/puppet'
+  run_dir='/var/run/puppet'
+  ssl_dir='$vardir/ssl'
+  extra_a_options='
+    stringify_facts = false'
+  extra_u_options='
+    parser          = future
+    stringify_facts = false
+    ordering        = manifest'
+else
+  PCONF="/etc/puppetlabs/puppet/puppet.conf"
+  var_dir='/opt/puppetlabs/puppet/cache'
+  log_dir='/var/log/puppetlabs/puppet'
+  run_dir='/var/run/puppetlabs'
+  ssl_dir='/etc/puppetlabs/puppet/ssl'
+  extra_a_options=''
+  extra_u_options=''
+  mkdir -p /etc/puppetlabs/code/environments/${PUPPET_ENVIRONMENT}
+fi
+
 echo "Configuring Puppet..."
-cat > /etc/puppet/puppet.conf <<-EOF
+cat > ${PCONF} <<-EOF
 ### File placed by puppet-bootstrap ###
-## https://docs.puppetlabs.com/references/3.stable/configuration.html
+## https://docs.puppet.com/puppet/latest/reference/configuration.html
 #
 
 [main]
-    vardir = /var/lib/puppet
-    logdir = /var/log/puppet
-    rundir = /var/run/puppet
-    ssldir = \$vardir/ssl
+    vardir = ${var_dir}
+    logdir = ${log_dir}
+    rundir = ${run_dir}
+    ssldir = ${ssl_dir}
 
 [agent]
     pluginsync      = true
@@ -47,14 +70,10 @@ cat > /etc/puppet/puppet.conf <<-EOF
     ca_server       = ${PUPPET_SERVER}
     certname        = ${PUPPET_CERTNAME}
     environment     = ${PUPPET_ENVIRONMENT}
-    server          = ${PUPPET_SERVER}
-    stringify_facts = false
+    server          = ${PUPPET_SERVER}${extra_a_options}
 
 [user]
-    environment     = ${PUPPET_ENVIRONMENT}
-    parser          = future
-    stringify_facts = false
-    ordering        = manifest
+    environment     = ${PUPPET_ENVIRONMENT}${extra_u_options}
 EOF
-chown root:${PUPPET_ROOT_GROUP} /etc/puppet/puppet.conf
-chmod 0644 /etc/puppet/puppet.conf
+chown root:${PUPPET_ROOT_GROUP} ${PCONF}
+chmod 0644 ${PCONF}

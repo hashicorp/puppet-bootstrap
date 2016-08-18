@@ -106,7 +106,7 @@ if (!($PuppetInstalled)) {
     Write-Host "Configuring Puppet..."
 @"
 ### File placed by puppet-bootstrap ###
-## https://docs.puppetlabs.com/references/3.stable/configuration.html
+## https://docs.puppet.com/puppet/latest/reference/configuration.html
 #
 
 [main]
