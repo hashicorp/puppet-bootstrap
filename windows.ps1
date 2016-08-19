@@ -103,6 +103,19 @@ if (!($PuppetInstalled)) {
   Write-Host "Puppet successfully installed."
 
   if ($PuppetEnvironment -ne "vagrant") {
+    if ($PuppetCollection) {
+      $extra_a_options = ''
+      $extra_u_options = ''
+      #New-Item -path "C:\ProgramData\PuppetLabs\$PuppetEnvironment" -type directory
+    } else {
+      $extra_a_options = '
+    stringify_facts = false'
+      $extra_u_options = '
+    parser          = future
+    stringify_facts = false
+    ordering        = manifest'
+    }
+
     Write-Host "Configuring Puppet..."
 @"
 ### File placed by puppet-bootstrap ###
@@ -123,14 +136,10 @@ if (!($PuppetInstalled)) {
     ca_server       = $PuppetServer
     certname        = $PuppetCertname
     environment     = $PuppetEnvironment
-    server          = $PuppetServer
-    stringify_facts = false
+    server          = $PuppetServer$extra_a_options
 
 [user]
-    environment     = $PuppetEnvironment
-    parser          = future
-    stringify_facts = false
-    ordering        = manifest
+    environment     = $PuppetEnvironment$extra_u_options
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
     Write-Host "Starting Puppet ScheduledTask..."
