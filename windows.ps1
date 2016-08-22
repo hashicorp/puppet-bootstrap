@@ -40,6 +40,9 @@ Import-Module ScheduledTasks
 if ($PuppetCollection) {
   $PuppetPackage = "puppet-agent"
   Write-Host "Puppet Collection $PuppetCollection specified, updated PuppetPackage to `"$PuppetPackage`""
+  $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment\manifests"
+} else {
+  $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\puppet\etc\manifests"
 }
 
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
@@ -59,7 +62,7 @@ switch ($PuppetEnvironment) {
 }
 
 switch ($PuppetEnvironment) {
-  locdev  { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf C:\ProgramData\PuppetLabs\puppet\etc\manifests" }
+  locdev  { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
   default { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
 }
 
@@ -99,6 +102,10 @@ if (!($PuppetInstalled)) {
   Write-Host "Stopping Puppet service that is running by default..."
   Start-Sleep -s 5
   Set-Service -Name puppet -StartupType Disabled -Status Stopped
+  if ($PuppetCollection) {
+    Set-Service -Name mcollective -StartupType Disabled -Status Stopped
+    Set-Service -Name pxp-agent -StartupType Disabled -Status Stopped
+  }
 
   Write-Host "Puppet successfully installed."
 
