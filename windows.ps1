@@ -104,10 +104,18 @@ if (!($PuppetInstalled)) {
 
   if ($PuppetEnvironment -ne "vagrant") {
     if ($PuppetCollection) {
+      $var_dir='C:\ProgramData\PuppetLabs\puppet\cache'
+      $log_dir='C:\ProgramData\PuppetLabs\puppet\var\log'
+      $run_dir='C:\ProgramData\PuppetLabs\puppet\var\run'
+      $ssl_dir='C:\ProgramData\PuppetLabs\puppet\etc\ssl'
       $extra_a_options = ''
       $extra_u_options = ''
-      #New-Item -path "C:\ProgramData\PuppetLabs\$PuppetEnvironment" -type directory
+      New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory
     } else {
+      $var_dir='C:\ProgramData\PuppetLabs\puppet\var\lib'
+      $log_dir='C:\ProgramData\PuppetLabs\puppet\var\log'
+      $run_dir='C:\ProgramData\PuppetLabs\puppet\var\run'
+      $ssl_dir='$vardir/ssl'
       $extra_a_options = '
     stringify_facts = false'
       $extra_u_options = '
@@ -123,10 +131,10 @@ if (!($PuppetInstalled)) {
 #
 
 [main]
-    vardir = C:\ProgramData\PuppetLabs\puppet\var\lib
-    logdir = C:\ProgramData\PuppetLabs\puppet\var\log
-    rundir = C:\ProgramData\PuppetLabs\puppet\var\run
-    ssldir = `$vardir/ssl
+    vardir = $var_dir
+    logdir = $log_dir
+    rundir = $run_dir
+    ssldir = $ssl_dir
 
 [agent]
     pluginsync      = true
