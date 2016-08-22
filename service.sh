@@ -4,16 +4,24 @@
 #
 set -e
 
-PUPPET_SERVICE=${PUPPET_SERVICE:-"puppet" # "com.puppetlabs.puppet"}
+PUPPET_ENVIRONMENT=${PUPPET_ENVIRONMENT:-"test"}
+
+if [[ "${PUPPET_COLLECTION}" == "" ]]; then
+  PCONF="/etc/puppet/puppet.conf"
+  PMANIFESTS="/etc/puppet/manifests"
+  puppet_cmd='/usr/bin/puppet'
+else
+  PCONF="/etc/puppetlabs/puppet/puppet.conf"
+  PMANIFESTS="/etc/puppetlabs/code/environments/${PUPPET_ENVIRONMENT}/manifests"
+  puppet_cmd='/opt/puppetlabs/bin/puppet'
+fi
 
 case "${PUPPET_ENVIRONMENT}" in
 locdev)
-  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet"}
-  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/env puppet apply --config /etc/puppet/puppet.conf /etc/puppet/manifests"}
+  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} apply --config ${PCONF} ${PMANIFESTS}"}
   ;;
 *)
-  PUPPET_CRON_NAM=${PUPPET_CRON_NAM:-"puppet"}
-  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"/usr/bin/env puppet agent --config /etc/puppet/puppet.conf --onetime --no-daemonize"}
+  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} agent --config ${PCONF} --onetime --no-daemonize"}
   ;;
 esac
 
@@ -22,11 +30,15 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-# Start the Puppet Agent Service
-# echo "Starting Puppet Agent..."
-# sudo puppet resource service ${PUPPET_SERVICE} ensure=running enable=true
+# Stop the Puppet Agent Service
+echo "Stopping Puppet service that is running by default..."
+puppet resource service puppet ensure=stopped enable=false
+if [[ "${PUPPET_COLLECTION}" != "" ]]; then
+  puppet resource service mcollective ensure=stopped enable=false
+  puppet resource service pxp-agent ensure=stopped enable=false
+fi
 # Create a Cron Job Instead
 echo "Starting Puppet Cron..."
-puppet resource cron ${PUPPET_CRON_NAM} ensure=present command="${PUPPET_CRON_CMD}" user=root minute=0
+puppet resource cron puppet ensure=present command="${PUPPET_CRON_CMD}" user=root minute=0
 # Force a run to generate ssl sign request
 # puppet agent --test || true

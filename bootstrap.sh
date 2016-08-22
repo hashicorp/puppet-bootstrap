@@ -27,7 +27,6 @@ debian) source "${BOOTSTRAP_HOME}/debian.sh" ;;
 ubuntu) source "${BOOTSTRAP_HOME}/ubuntu.sh" ;;
 osx|mac_os_x)
   PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"wheel"}
-  PUPPET_SERVICE=${PUPPET_SERVICE:-"com.puppetlabs.puppet"}
   source "${BOOTSTRAP_HOME}/mac_os_x.sh"
   ;;
 *)
