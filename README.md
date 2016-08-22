@@ -13,6 +13,11 @@
 ```shell
 \curl -sSL https://git.io/vLD6L | sudo bash -s '' production
 ```
+### One Line Install/Configure/Start Puppet (from puppet 4 collection)
+
+```shell
+\curl -sSL https://git.io/vLD6L | sudo bash -s '' locdev pc1
+```
 
 ### One Line Install/Configure/Start Puppet (Windows)
 
@@ -36,7 +41,7 @@ rm -rf puppet-bootstrap-master
 ### bootstrap options
 
 ```shell
-./bootstrap.sh {redhat_5|redhat_6|redhat_7|debian|ubuntu|osx} [environment] [server]
+./bootstrap.sh {redhat_5|redhat_6|redhat_7|debian|ubuntu|osx} [environment] [collection] [server]
 ```
 
 ### force puppet run (after sign cert)
