@@ -19,7 +19,7 @@ REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
 #--------------------------------------------------------------------
-PATH="/opt/puppetlabs/bin:${PATH}"
+PATH=$PATH:/opt/puppetlabs/bin
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
