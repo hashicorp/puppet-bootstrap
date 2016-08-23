@@ -35,11 +35,14 @@ osx|mac_os_x)
   exit 1
 esac
 
+# Post Install Cleanup
+source "${BOOTSTRAP_HOME}/postinstall.sh"
+
 if [ "${PUPPET_ENVIRONMENT}" != "vagrant" ]; then
-  # Configure /etc/puppet/puppet.conf
+  # Configure puppet.conf
   source "${BOOTSTRAP_HOME}/configure.sh"
 
-  # Start the Puppet Agent Service
+  # Start the Puppet Service or Cron
   source "${BOOTSTRAP_HOME}/service.sh"
 fi
 

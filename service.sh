@@ -30,13 +30,9 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-# Stop the Puppet Agent Service
-echo "Stopping Puppet service that is running by default..."
-puppet resource service puppet ensure=stopped enable=false
-if [[ "${PUPPET_COLLECTION}" != "" ]]; then
-  puppet resource service mcollective ensure=stopped enable=false
-  puppet resource service pxp-agent ensure=stopped enable=false
-fi
+# Start the Puppet Agent Service
+# echo "Starting Puppet Agent..."
+# puppet resource service puppet ensure=running enable=true
 # Create a Cron Job Instead
 echo "Starting Puppet Cron..."
 puppet resource cron puppet ensure=present command="${PUPPET_CRON_CMD}" user=root minute=0

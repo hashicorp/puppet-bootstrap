@@ -101,11 +101,12 @@ if (!($PuppetInstalled)) {
   # Stop the service that it autostarts
   Write-Host "Stopping Puppet service that is running by default..."
   Start-Sleep -s 5
-  Set-Service -Name puppet -StartupType Disabled -Status Stopped
   if ($PuppetCollection) {
+    New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory
     Set-Service -Name mcollective -StartupType Disabled -Status Stopped
     Set-Service -Name pxp-agent -StartupType Disabled -Status Stopped
   }
+  Set-Service -Name puppet -StartupType Disabled -Status Stopped
 
   Write-Host "Puppet successfully installed."
 
@@ -117,7 +118,6 @@ if (!($PuppetInstalled)) {
       $ssl_dir='C:\ProgramData\PuppetLabs\puppet\etc\ssl'
       $extra_a_options = ''
       $extra_u_options = ''
-      New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory
     } else {
       $var_dir='C:\ProgramData\PuppetLabs\puppet\var\lib'
       $log_dir='C:\ProgramData\PuppetLabs\puppet\var\log'

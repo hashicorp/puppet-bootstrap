@@ -47,7 +47,6 @@ else
   ssl_dir='/etc/puppetlabs/puppet/ssl'
   extra_a_options=''
   extra_u_options=''
-  mkdir -p /etc/puppetlabs/code/environments/${PUPPET_ENVIRONMENT}
 fi
 
 echo "Configuring Puppet..."
