@@ -15,8 +15,10 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-# Remove any detected legacy puppet installs
-source "${BOOTSTRAP_HOME}/legacy.sh"
+if [ "${PUPPET_ENVIRONMENT}" != "vagrant" ]; then
+  # Remove any detected legacy puppet installs
+  source "${BOOTSTRAP_HOME}/legacy.sh"
+fi
 
 # Install Puppet Using the Puppet Labs Package Repositories
 case "${PLATFORM}" in
