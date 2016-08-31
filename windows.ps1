@@ -46,24 +46,19 @@ if ($PuppetCollection) {
 }
 
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
-switch ($PuppetEnvironment) {
-  locdev      { $PuppetServer = "localhost" }
-  vagrant     { $PuppetServer = "localhost" }
-  esodev      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
-  esotst      { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
-  development { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
-  test        { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
-  staging     { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
-  production  { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
-  default     {
+switch -regex ($PuppetEnvironment) {
+  'locdev|loctst|locprd|vagrant'        { $PuppetServer = "localhost" }
+  'esodev|esotst'                       { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
+  'development|test|staging|production' { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+  default {
     Write-Error "Unknown/Unsupported PuppetEnvironment."
     Exit 1
   }
 }
 
-switch ($PuppetEnvironment) {
-  locdev  { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
-  default { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
+switch -regex ($PuppetEnvironment) {
+  'locdev|loctst|locprd|vagrant' { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
+  default                        { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
 }
 
 $PuppetInstalled = $false
