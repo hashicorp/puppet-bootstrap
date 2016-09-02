@@ -10,15 +10,17 @@ if [[ "${PUPPET_COLLECTION}" == "" ]]; then
   PCONF="/etc/puppet/puppet.conf"
   PMANIFESTS="/etc/puppet/manifests"
   puppet_cmd='/usr/bin/puppet'
+  logdest='/var/log/puppet/puppet.log'
 else
   PCONF="/etc/puppetlabs/puppet/puppet.conf"
   PMANIFESTS="/etc/puppetlabs/code/environments/${PUPPET_ENVIRONMENT}/manifests"
   puppet_cmd='/opt/puppetlabs/bin/puppet'
+  logdest='/var/log/puppetlabs/pxp-agent/puppet.log'
 fi
 
 case "${PUPPET_ENVIRONMENT}" in
 locdev|loctst|locprd|vagrant)
-  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} apply --config ${PCONF} ${PMANIFESTS}"}
+  PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} apply --config ${PCONF} --logdest ${logdest} ${PMANIFESTS}"}
   ;;
 *)
   PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} agent --config ${PCONF} --onetime --no-daemonize"}
