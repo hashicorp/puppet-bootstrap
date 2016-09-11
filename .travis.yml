@@ -12,5 +12,5 @@ matrix:
       sudo: required
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo mac_os_x.sh ; elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ubuntu.sh ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo ./mac_os_x.sh ; elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ./ubuntu.sh ; fi
 
