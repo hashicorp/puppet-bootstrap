@@ -11,8 +11,8 @@ set -e
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-1.7.2.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/puppet-3.2.3.dmg"}
+FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-1.7.2.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-3.2.3.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
