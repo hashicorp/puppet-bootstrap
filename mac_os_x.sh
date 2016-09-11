@@ -46,7 +46,7 @@ function install_dmg() {
   # Install. It will be the only pkg in there, so just find any pkg
   echo "-- Installing pkg..."
   pkg_path=$(find "${mount_point}" -name '*.pkg' -mindepth 1 -maxdepth 1)
-  installer -pkg "${pkg_path}" -target / >/dev/null
+  installer -pkg "${pkg_path}" -target /
 
   # Unmount
   echo "-- Unmounting and ejecting DMG..."
