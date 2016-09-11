@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Mac OS X 10.8 and 10.7.
+# This bootstraps Puppet on Mac OS X 10.10 (Xcode 7.1). It might still work on OS 10.8 and 10.7,
+# however this is not guaranteed as those versions are not testable on Travis.
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.

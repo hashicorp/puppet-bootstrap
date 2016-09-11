@@ -22,7 +22,7 @@ on every version of every platform to set up Puppet.
   each script for details on the parameters.
 * Uses only _built-in_ software to install Puppet. These scripts
   have no external dependencies over the base install of their OS.
-* Installs Puppet agent and Facter.
+* Installs Puppet agent, Facter, and Hiera.
 * Does _not_ auto-start the Puppet agent service on the machine. Your
   bootstrap can choose to do this in addition to these scripts, if you'd
   like.
