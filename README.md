@@ -30,6 +30,13 @@ iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
 @powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))"
 ```
 
+### Install/Configure/Start Puppet (Windows - production)
+```shell
+# PowerShell
+$env:PuppetEnvironment = "production"
+iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
+```
+
 ### Advanced Install/Configure/Start Puppet
 
 ```shell
