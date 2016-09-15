@@ -64,9 +64,10 @@ switch -regex ($PuppetEnvironment) {
   }
 }
 
+$PuppetCmd = "C:\Program Files\Puppet Labs\Puppet\bin\puppet"
 switch -regex ($PuppetEnvironment) {
-  'locdev|loctst|locprd|vagrant' { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
-  default                        { $PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet`" agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
+  'locdev|loctst|locprd|vagrant' { $PuppetArg = "apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
+  default                        { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
 }
 
 $PuppetInstalled = $false
@@ -161,7 +162,7 @@ if (!($PuppetInstalled)) {
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
     Write-Host "Starting Puppet ScheduledTask..."
-    $action = New-ScheduledTaskAction -Execute $PuppetCmd
+    $action = New-ScheduledTaskAction -Execute $PuppetCmd -Argument $PuppetArg
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
     Register-ScheduledTask -TaskName "puppet" -Action $action -Trigger $trigger -User "SYSTEM" -RunLevel "Highest"
   }
