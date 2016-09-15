@@ -47,9 +47,9 @@ if ($PuppetCollection) {
 
 if (!($PuppetCertname)) {
   if ($env:userdnsdomain) {
-    $PuppetCertname = ($env:computername+'.'+$env:userdnsdomain).tolower()
+    $PuppetCertname = ("${env:computername}.${env:userdnsdomain}").tolower()
   } else {
-    $PuppetCertname = ($env:computername+'.it.muohio.edu').tolower()
+    $PuppetCertname = ("${env:computername}.it.muohio.edu").tolower()
   }
 }
 
@@ -64,7 +64,7 @@ switch -regex ($PuppetEnvironment) {
   }
 }
 
-$PuppetCmd = "C:\Program Files\Puppet Labs\Puppet\bin\puppet"
+$PuppetCmd = "C:\Program Files\Puppet` Labs\Puppet\bin\puppet.bat"
 switch -regex ($PuppetEnvironment) {
   'locdev|loctst|locprd|vagrant' { $PuppetArg = "apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
   default                        { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
@@ -115,18 +115,15 @@ if (!($PuppetInstalled)) {
   Write-Host "Puppet successfully installed."
 
   if ($PuppetEnvironment -ne "vagrant") {
+    $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
+    $var_dir="${dir_prefix}/var"
+    $log_dir="${dir_prefix}/var/log"
+    $run_dir="${dir_prefix}/var/run"
+    $ssl_dir="${dir_prefix}/etc/ssl"
     if ($PuppetCollection) {
-      $var_dir='C:\ProgramData\PuppetLabs\puppet\cache'
-      $log_dir='C:\ProgramData\PuppetLabs\puppet\var\log'
-      $run_dir='C:\ProgramData\PuppetLabs\puppet\var\run'
-      $ssl_dir='C:\ProgramData\PuppetLabs\puppet\etc\ssl'
       $extra_a_options = ''
       $extra_u_options = ''
     } else {
-      $var_dir='C:\ProgramData\PuppetLabs\puppet\var\lib'
-      $log_dir='C:\ProgramData\PuppetLabs\puppet\var\log'
-      $run_dir='C:\ProgramData\PuppetLabs\puppet\var\run'
-      $ssl_dir='$vardir/ssl'
       $extra_a_options = '
     stringify_facts = false'
       $extra_u_options = '
