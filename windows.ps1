@@ -31,7 +31,7 @@
 param(
    [string]$PuppetPackage = "puppet"
   ,[string]$PuppetCollection = $env:PuppetCollection
-  ,[string]$PuppetCertname = $env:computername
+  ,[string]$PuppetCertname = $env:PuppetCertname
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
 )
 
@@ -43,6 +43,14 @@ if ($PuppetCollection) {
   $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment\manifests"
 } else {
   $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\puppet\etc\manifests"
+}
+
+if (!($PuppetCertname)) {
+  if ($env:userdnsdomain) {
+    $PuppetCertname = ($env:computername+'.'+$env:userdnsdomain).tolower()
+  } else {
+    $PuppetCertname = ($env:computername+'.it.muohio.edu').tolower()
+  }
 }
 
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
