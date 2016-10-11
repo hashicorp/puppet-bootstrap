@@ -64,7 +64,7 @@ switch -regex ($PuppetEnvironment) {
   }
 }
 
-$PuppetCmd = "C:\Program Files\Puppet` Labs\Puppet\bin\puppet.bat"
+$PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat`""
 switch -regex ($PuppetEnvironment) {
   'locdev|loctst|locprd|vagrant' { $PuppetArg = "apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
   default                        { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
