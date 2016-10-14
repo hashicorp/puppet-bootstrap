@@ -27,12 +27,16 @@
 .PARAMETER PuppetEnvironment
     The environment to use for this puppet agent.
     This defaults to "test".
+
+.PARAMETER chocolateyProxyLocation
+    Use this web proxy to do the install.
 #>
 param(
    [string]$PuppetPackage = "puppet"
   ,[string]$PuppetCollection = $env:PuppetCollection
   ,[string]$PuppetCertname = $env:PuppetCertname
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
+  ,[string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
 )
 
 Import-Module ScheduledTasks
@@ -91,7 +95,15 @@ if (!($PuppetInstalled)) {
 
   # Install chocolatey
   Write-Host "Installing Chocolatey"
-  iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+  $WebClient = New-Object System.Net.WebClient
+  if ($chocolateyProxyLocation) {
+    $WebProxy = New-Object System.Net.WebProxy($chocolateyProxyLocation,$true)
+    $WebClient.Proxy = $WebProxy
+    iex ($WebClient.DownloadString('https://chocolatey.org/install.ps1'))
+    choco config set proxy $chocolateyProxyLocation
+  } else {
+    iex ($WebClient.DownloadString('https://chocolatey.org/install.ps1'))
+  }
 
   # Install it - use chocolatey
   $install_args = @("install", $PuppetPackage, "-y", "--allow-empty-checksums")

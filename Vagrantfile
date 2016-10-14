@@ -96,9 +96,9 @@ Vagrant.configure(2) do |config|
       SHELL
     when 'windows'
       os.vm.provision 'shell', :inline => <<-SHELL
-        $env:PuppetCollection = "pc1"
-        $env:PuppetEnvironment = "locdev"
-        iex ((New-Object net.webclient).DownloadString('https://git.io/vanax'))
+        $env:PuppetCollection = 'pc1'
+        $env:PuppetEnvironment = 'locdev'
+        iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
       SHELL
     else
       raise("Don't know how to install puppet on #{kernel}")
