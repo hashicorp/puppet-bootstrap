@@ -1,34 +1,35 @@
 #!/usr/bin/env bash
-# This bootstraps Puppet on CentOS 7.x
-# It has been tested on CentOS 7.0 64bit
+
+# This bootstraps Puppet 4 on CentOS 7.x.
+# It has been tested on CentOS 7.2 64bit.
 
 set -e
 
-REPO_URL="http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm"
+REPO_URL='https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm'
 
-if [ "$EUID" -ne "0" ]; then
-  echo "This script must be run as root." >&2
+if [ "$EUID" -ne '0' ]; then
+  echo 'This script must be run as root.' >&2
   exit 1
 fi
 
-if which puppet > /dev/null 2>&1; then
-  echo "Puppet is already installed."
+if [ -f /opt/puppetlabs/bin/puppet ]
+then
+  echo 'Puppet is already installed.'
   exit 0
 fi
 
-# Install wget
-echo "Installing wget..."
-yum install -y wget > /dev/null
+echo 'Installing Puppet Collection 1 repo.'
+yum localinstall -y -q "${REPO_URL}"
 
+echo 'Installing puppet.'
+yum install -y -q puppetserver puppet-agent
 
-# Install puppet labs repo
-echo "Configuring PuppetLabs repo..."
-repo_path=$(mktemp)
-wget --output-document="${repo_path}" "${REPO_URL}" 2>/dev/null
-rpm -i "${repo_path}" >/dev/null
+echo 'Puppet installed.'
 
-# Install Puppet...
-echo "Installing puppet"
-yum install -y puppet > /dev/null
-
-echo "Puppet installed!"
+# set up symlinks.
+ln -s /opt/puppetlabs/puppet/bin/facter /usr/local/bin/
+ln -s /opt/puppetlabs/puppet/bin/hiera /usr/local/bin/
+ln -s /opt/puppetlabs/puppet/bin/mco /usr/local/bin/
+ln -s /opt/puppetlabs/puppet/bin/puppet /usr/local/bin/
+ln -s /opt/puppetlabs/server/apps/puppetserver/bin/puppetserver /usr/local/bin/
+ln -s -f /opt/puppetlabs/server/apps/puppetdb/bin/puppetdb /usr/local/bin/puppetdb
