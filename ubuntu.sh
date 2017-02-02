@@ -15,6 +15,7 @@ set -e
 [[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
 
 REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
+PUPPET_PACKAGE=${PUPPET_PACKAGE:-$PINST}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
@@ -23,7 +24,7 @@ PATH=$PATH:/opt/puppetlabs/bin
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
   exit 1
-elif dpkg-query --status ${PINST} > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
+elif dpkg-query --status ${PUPPET_PACKAGE} > /dev/null 2>&1 && apt-cache policy | grep --quiet apt.puppetlabs.com; then
   echo "Puppet $(puppet --version) is already installed."
   exit 0
 fi
@@ -47,7 +48,7 @@ apt-get update >/dev/null
 
 # Install Puppet
 echo "Installing Puppet..."
-DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install ${PINST} >/dev/null
+DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install ${PUPPET_PACKAGE} >/dev/null
 
 echo "Puppet installed!"
 
