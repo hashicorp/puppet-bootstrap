@@ -49,15 +49,19 @@ if ($PuppetCollection) {
   $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\puppet\etc\manifests"
 }
 
+if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
+
 if (!($PuppetCertname)) {
   if ($env:userdnsdomain) {
     $PuppetCertname = ("${env:computername}.${env:userdnsdomain}").tolower()
   } else {
-    $PuppetCertname = ("${env:computername}.it.muohio.edu").tolower()
+    switch -regex ($PuppetEnvironment) {
+      'locprd|production' { $PuppetCertname = ("${env:computername}.it.muohio.edu").tolower() }
+      default             { $PuppetCertname = ("${env:computername}.ittst.muohio.edu").tolower() }
+    }
   }
 }
 
-if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
 switch -regex ($PuppetEnvironment) {
   'locdev|loctst|locprd|vagrant'        { $PuppetServer = "localhost" }
   'esodev|esotst'                       { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
