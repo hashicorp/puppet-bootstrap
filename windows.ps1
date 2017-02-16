@@ -52,13 +52,20 @@ if ($PuppetCollection) {
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
 
 if (!($PuppetCertname)) {
-  if ($env:userdnsdomain) {
-    $PuppetCertname = ("${env:computername}.${env:userdnsdomain}").tolower()
-  } else {
-    switch -regex ($PuppetEnvironment) {
-      'locprd|production' { $PuppetCertname = ("${env:computername}.it.muohio.edu").tolower() }
-      default             { $PuppetCertname = ("${env:computername}.ittst.muohio.edu").tolower() }
+  # Try and query the system
+  $sysinfo = Get-WmiObject -Class Win32_ComputerSystem
+  if ($sysinfo.Name) {
+    if ($sysinfo.Domain) {
+      $PuppetCertname = ($sysinfo.Name+"."+$sysinfo.Domain).tolower()
+    } else {
+      switch -regex ($PuppetEnvironment) {
+        'locprd|production' { $PuppetCertname = ($sysinfo.Name+".it.muohio.edu").tolower() }
+        default             { $PuppetCertname = ($sysinfo.Name+".ittst.muohio.edu").tolower() }
+      }
     }
+  } else {
+    Write-Error "Can not auto determine PuppetCertname."
+    Exit 1
   }
 }
 
