@@ -77,7 +77,7 @@ switch -regex ($PuppetEnvironment) {
   }
 }
 
-$PuppetCmd = "`"C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat`""
+$PuppetCmd = "C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat"
 switch -regex ($PuppetEnvironment) {
   'locdev|loctst|locprd|vagrant' { $PuppetArg = "apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
   default                        { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
@@ -180,7 +180,7 @@ if (!($PuppetInstalled)) {
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
     Write-Host "Starting Puppet ScheduledTask..."
-    schtasks /create /tn "puppet" /tr "$PuppetCmd $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 1440 /ru SYSTEM /rl HIGHEST /f
+    schtasks /create /tn "puppet" /tr "'$PuppetCmd' $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 24:00 /ru SYSTEM /rl HIGHEST /f
   }
 
   Write-Host "Success!!"
