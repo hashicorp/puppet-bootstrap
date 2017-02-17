@@ -39,8 +39,6 @@ param(
   ,[string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
 )
 
-Import-Module ScheduledTasks
-
 if ($PuppetCollection) {
   $PuppetPackage = "puppet-agent"
   Write-Host "Puppet Collection $PuppetCollection specified, updated PuppetPackage to `"$PuppetPackage`""
@@ -182,9 +180,7 @@ if (!($PuppetInstalled)) {
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
     Write-Host "Starting Puppet ScheduledTask..."
-    $action = New-ScheduledTaskAction -Execute $PuppetCmd -Argument $PuppetArg
-    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration ([timeSpan]::maxvalue) -RepetitionInterval (New-TimeSpan -Hours 1)
-    Register-ScheduledTask -TaskName "puppet" -Action $action -Trigger $trigger -User "SYSTEM" -RunLevel "Highest"
+    schtasks /create /tn "puppet" /tr "$PuppetCmd $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 1440 /ru SYSTEM /rl HIGHEST /f
   }
 
   Write-Host "Success!!"
