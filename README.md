@@ -40,10 +40,11 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
 ### Install/Configure/Start Puppet (Windows - behind proxy)
 ```shell
 # PowerShell
+$env:PuppetEnvironment = 'test' # or production
 $WebClient = New-Object System.Net.WebClient
-$WebProxy = New-Object System.Net.WebProxy('http://localhost:8888',$true)
+$WebProxy = New-Object System.Net.WebProxy('http://webproxy.mcs.miamioh.edu:80',$true)
 $WebClient.Proxy = $WebProxy
-$env:chocolateyProxyLocation = 'http://localhost:8888'
+$env:chocolateyProxyLocation = 'http://webproxy.mcs.miamioh.edu:80'
 iex ($WebClient.DownloadString('https://git.io/vanax'))
 ```
 
