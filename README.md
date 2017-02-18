@@ -41,10 +41,9 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
 ```shell
 # PowerShell
 $env:PuppetEnvironment = 'test' # or production
-$WebClient = New-Object System.Net.WebClient
-$WebProxy = New-Object System.Net.WebProxy('http://webproxy.mcs.miamioh.edu:80',$true)
-$WebClient.Proxy = $WebProxy
 $env:chocolateyProxyLocation = 'http://webproxy.mcs.miamioh.edu:80'
+$WebClient = New-Object System.Net.WebClient
+$WebClient.Proxy = New-Object System.Net.WebProxy($env:chocolateyProxyLocation,$true)
 iex ($WebClient.DownloadString('https://git.io/vanax'))
 ```
 
