@@ -39,6 +39,7 @@ apt-get update >/dev/null
 
 # Install Puppet
 echo "Installing Puppet..."
+DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet-common >/dev/null
 DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install puppet >/dev/null
 
 echo "Puppet installed!"
