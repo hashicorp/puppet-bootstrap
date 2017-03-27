@@ -1,0 +1,16 @@
+language: c
+
+matrix:
+  # TODO remove when OSX is stable
+  allow_failures:
+    - os: linux
+  include:
+    - os: osx
+      osx_image: xcode7.1
+    - os: linux
+      dist: precise
+      sudo: required
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo ./mac_os_x.sh ; elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ./ubuntu.sh ; fi
+

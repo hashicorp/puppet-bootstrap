@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Mac OS X 10.8 and 10.7.
+# This bootstraps Puppet on Mac OS X 10.10 (Xcode 7.1). It might still work on OS 10.8 and 10.7,
+# however this is not guaranteed as those versions are not testable on Travis.
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
 #   - PUPPET_PACKAGE_URL: The URL to the Puppet package to install.
+#   - HIERA_PACKAGE_URL:  The URL to the Hiera package to install.
 #
 set -e
 
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-1.7.2.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/puppet-3.2.3.dmg"}
+FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-1.7.6.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-3.8.7.dmg"}
+HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-1.3.4.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
@@ -44,16 +47,17 @@ function install_dmg() {
   # Install. It will be the only pkg in there, so just find any pkg
   echo "-- Installing pkg..."
   pkg_path=$(find "${mount_point}" -name '*.pkg' -mindepth 1 -maxdepth 1)
-  installer -pkg "${pkg_path}" -target / >/dev/null
+  installer -pkg "${pkg_path}" -target /
 
   # Unmount
   echo "-- Unmounting and ejecting DMG..."
   hdiutil eject "${mount_point}" >/dev/null
 }
 
-# Install Puppet and Facter
+# Install Puppet and Facter and Hiera
 install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
 install_dmg "Facter" "${FACTER_PACKAGE_URL}"
+install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
