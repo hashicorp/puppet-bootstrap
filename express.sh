@@ -40,5 +40,12 @@ if [ -z "${PLATFORM}" ]; then
 fi
 
 bootstrap_tmp_path=$(mktemp -d -t puppet-bootstrap.XXXXXXXXXX)
-\curl -sSL "${BOOTSTRAP_TAR_URL}" | tar xz -C "${bootstrap_tmp_path}"
+if hash curl 2>/dev/null; then
+  \curl -sSL "${BOOTSTRAP_TAR_URL}" | tar xz -C "${bootstrap_tmp_path}"
+elif hash wget 2>/dev/null; then
+  \wget -qO - "${BOOTSTRAP_TAR_URL}" | tar xz -C "${bootstrap_tmp_path}"
+else
+  echo "Can't find curl or wget to download puppet-bootstrap" >&2
+  exit 1
+fi
 source "${bootstrap_tmp_path}/puppet-bootstrap-master/bootstrap.sh" "$@"
