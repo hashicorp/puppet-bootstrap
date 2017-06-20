@@ -10,12 +10,13 @@ PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 
 case "${PUPPET_ENVIRONMENT}" in
 locdev|loctst|locprd|vagrant)        PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
-esodev|esotst)                       PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt02.mcs.miamioh.edu"} ;;
+esodev|esotst)                       PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt10.mcs.miamioh.edu"} ;;
 development|test|staging|production) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
 *)
   echo "Unknown/Unsupported PUPPET_ENVIRONMENT." >&2
   exit 1
 esac
+PUPPET_CA_SERVER=${PUPPET_CA_SERVER:-$PUPPET_SERVER}
 
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root." >&2
@@ -61,7 +62,7 @@ cat > ${PCONF} <<-EOF
     report          = true
     ignoreschedules = true
     daemon          = false
-    ca_server       = ${PUPPET_SERVER}
+    ca_server       = ${PUPPET_CA_SERVER}
     certname        = ${PUPPET_CERTNAME}
     environment     = ${PUPPET_ENVIRONMENT}
     server          = ${PUPPET_SERVER}${extra_a_options}
