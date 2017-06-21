@@ -9,7 +9,7 @@ set -e
   PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
 [[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
 
-PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-el-5.noarch.rpm"
+PUPPETLABS_RELEASE_RPM="https://uitlpupt02.mcs.miamioh.edu/puppet-bootstrap/puppetlabs-release${PUPPET_COLLECTION}-el-5.noarch.rpm"
 PUPPET_PACKAGE=${PUPPET_PACKAGE:-$PINST}
 
 PATH=$PATH:/opt/puppetlabs/bin
