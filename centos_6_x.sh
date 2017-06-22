@@ -23,7 +23,7 @@ fi
 
 # Install Puppet Labs repo
 echo "Configuring PuppetLabs repo..."
-rpm --quiet -i "${PUPPETLABS_RELEASE_RPM}"
+rpm --quiet -i "${PUPPETLABS_RELEASE_RPM}" || true
 
 # Install Puppet
 echo "Installing Puppet..."

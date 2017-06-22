@@ -25,7 +25,7 @@ fi
 echo "Configuring PuppetLabs repo..."
 repo_path=$(mktemp)
 curl -L -o "${repo_path}" "${PUPPETLABS_RELEASE_RPM}" 2>/dev/null
-rpm --quiet -i "${repo_path}"
+rpm --quiet -i "${repo_path}" || true
 rm "${repo_path}"
 
 # Install Puppet
