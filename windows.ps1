@@ -98,11 +98,17 @@ switch -regex ($PuppetEnvironment) {
 $PuppetInstalled = $false
 try {
   $ErrorActionPreference = "Stop";
-  Get-Command puppet | Out-Null
-  $PuppetInstalled = $true
-  $PuppetVersion=&puppet "--version"
-  Write-Host "Puppet $PuppetVersion is installed. This process does not ensure the exact version or at least version specified, but only that puppet is installed. Exiting..."
-  Exit 0
+  Get-Command choco | Out-Null
+  $ChocoList=&choco list --limit-output --local-only --exact $PuppetPackage
+  if ($ChocoList) {
+    Get-Command puppet | Out-Null
+    $PuppetInstalled = $true
+    $PuppetVersion=&puppet "--version"
+    Write-Host "Puppet $PuppetVersion is installed. This process does not ensure the exact version or at least version specified, but only that puppet is installed. Exiting..."
+    Exit 0
+  } else {
+    Write-Host "Puppet is not installed, continuing..."
+  }
 } catch {
   Write-Host "Puppet is not installed, continuing..."
 }
