@@ -28,6 +28,14 @@
     The environment to use for this puppet agent.
     This defaults to "test".
 
+.PARAMETER PuppetServer
+    The Puppet Server to use for this puppet agent.
+    This defaults to a guess based on PuppetEnvironment.
+
+.PARAMETER PuppetCAServer
+    The Puppet CA Server to use for this puppet agent.
+    This defaults to a guess based on PuppetEnvironment.
+
 .PARAMETER chocolateyProxyLocation
     Use this web proxy to do the install.
 #>
@@ -36,6 +44,8 @@ param(
   ,[string]$PuppetCollection = $env:PuppetCollection
   ,[string]$PuppetCertname = $env:PuppetCertname
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
+  ,[string]$PuppetServer = $env:PuppetServer
+  ,[string]$PuppetCAServer = $env:PuppetCAServer
   ,[string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
 )
 
@@ -48,7 +58,6 @@ if ($PuppetCollection) {
 }
 
 if (!($PuppetEnvironment)) { $PuppetEnvironment = "test" }
-
 if (!($PuppetCertname)) {
   # Try and query the system
   $sysinfo = Get-WmiObject -Class Win32_ComputerSystem
@@ -67,15 +76,18 @@ if (!($PuppetCertname)) {
   }
 }
 
-switch -regex ($PuppetEnvironment) {
-  'locdev|loctst|locprd|vagrant'        { $PuppetServer = "localhost" }
-  'esodev|esotst'                       { $PuppetServer = "uitlpupt02.mcs.miamioh.edu" }
-  'development|test|staging|production' { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
-  default {
-    Write-Error "Unknown/Unsupported PuppetEnvironment."
-    Exit 1
+if (!($PuppetServer)) {
+  switch -regex ($PuppetEnvironment) {
+    'locdev|loctst|locprd|vagrant'        { $PuppetServer = "localhost" }
+    'esodev|esotst'                       { $PuppetServer = "uitlpupt10.mcs.miamioh.edu" }
+    'development|test|staging|production' { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+    default {
+      Write-Error "Unknown/Unsupported PuppetEnvironment."
+      Exit 1
+    }
   }
 }
+if (!($PuppetCAServer)) { $PuppetCAServer = $PuppetServer }
 
 $PuppetCmd = "C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat"
 switch -regex ($PuppetEnvironment) {
@@ -170,7 +182,7 @@ if (!($PuppetInstalled)) {
     report          = true
     ignoreschedules = true
     daemon          = false
-    ca_server       = $PuppetServer
+    ca_server       = $PuppetCAServer
     certname        = $PuppetCertname
     environment     = $PuppetEnvironment
     server          = $PuppetServer$extra_a_options
