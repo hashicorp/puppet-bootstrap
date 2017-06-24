@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash 
 #
-# This bootstraps Puppet on Mac OS X 10.8 and 10.7.
+# This bootstraps Puppet on Mac OS X 10.9 - 10.12 && is depecrated for 10.7/10.8
 #
 # Optional environmental variables:
 #   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
@@ -8,13 +8,13 @@
 #
 set -e
 
-OSX_VERSION=$(defaults read loginwindow SystemVersionStampAsString)
+OSX_VERSION=$(sw_vers | grep -i productversion| awk '{print $2}')
 
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
 FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/facter-latest.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://puppetlabs.com/downloads/mac/$OSX_VERSION/PC1/puppet-agent-1.10.4.1.osx$OSX_VERSION.dmg"}
+PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"http://downloads.puppetlabs.com/mac/$OSX_VERSION/PC1/x86_64/puppet-agent-1.10.4-1.osx$OSX_VERSION.dmg"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
@@ -59,3 +59,5 @@ install_dmg "Facter" "${FACTER_PACKAGE_URL}"
 
 # Hide all users from the loginwindow with uid below 500, which will include the puppet user
 defaults write /Library/Preferences/com.apple.loginwindow Hide500Users -bool YES
+
+echo "finished installing puppet..."
