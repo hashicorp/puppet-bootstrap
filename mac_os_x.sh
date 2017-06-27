@@ -8,7 +8,7 @@
 #
 set -e
 
-OSX_VERSION=$(sw_vers | grep -i productversion| awk '{print $2}')
+OSX_VERSION=$(sw_vers | grep -i productversion| awk '{print $2}' | cut -f1,2 -d'.')
 
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
