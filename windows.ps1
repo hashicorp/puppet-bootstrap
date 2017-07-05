@@ -80,7 +80,7 @@ if (!($PuppetServer)) {
   switch -regex ($PuppetEnvironment) {
     'locdev|loctst|locprd|vagrant'        { $PuppetServer = "localhost" }
     'esodev|esotst'                       { $PuppetServer = "uitlpupt10.mcs.miamioh.edu" }
-    'development|test|staging|production' { $PuppetServer = "uitlpupp02.mcs.miamioh.edu" }
+    'development|test|staging|production' { $PuppetServer = "uitlpupp10.mcs.miamioh.edu" }
     default {
       Write-Error "Unknown/Unsupported PuppetEnvironment."
       Exit 1

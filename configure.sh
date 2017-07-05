@@ -11,7 +11,7 @@ PUPPET_ROOT_GROUP=${PUPPET_ROOT_GROUP:-"root"}
 case "${PUPPET_ENVIRONMENT}" in
 locdev|loctst|locprd|vagrant)        PUPPET_SERVER=${PUPPET_SERVER:-"localhost"} ;;
 esodev|esotst)                       PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupt10.mcs.miamioh.edu"} ;;
-development|test|staging|production) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp02.mcs.miamioh.edu"} ;;
+development|test|staging|production) PUPPET_SERVER=${PUPPET_SERVER:-"uitlpupp10.mcs.miamioh.edu"} ;;
 *)
   echo "Unknown/Unsupported PUPPET_ENVIRONMENT." >&2
   exit 1
