@@ -38,6 +38,9 @@
 
 .PARAMETER chocolateyProxyLocation
     Use this web proxy to do the install.
+
+.PARAMETER PuppetScheduledTask
+    Set to undef to skip setting up the ScheduledTask.
 #>
 param(
    [string]$PuppetPackage = "puppet"
@@ -47,6 +50,7 @@ param(
   ,[string]$PuppetServer = $env:PuppetServer
   ,[string]$PuppetCAServer = $env:PuppetCAServer
   ,[string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
+  ,[string]$PuppetScheduledTask = $env:PuppetScheduledTask
 )
 
 if ($PuppetCollection) {
@@ -197,8 +201,12 @@ if (!($PuppetInstalled)) {
     environment     = $PuppetEnvironment$extra_u_options
 "@ | Out-File C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf -encoding ASCII
 
-    Write-Host "Starting Puppet ScheduledTask..."
-    schtasks /create /tn "puppet" /tr "'$PuppetCmd' $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 24:00 /ru SYSTEM /rl HIGHEST /f
+    if ($PuppetScheduledTask -eq "undef") {
+      Write-Host "NOT Starting Puppet ScheduledTask..."
+    } else {
+      Write-Host "Starting Puppet ScheduledTask..."
+      schtasks /create /tn "puppet" /tr "'$PuppetCmd' $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 24:00 /ru SYSTEM /rl HIGHEST /f
+    }
   }
 
   Write-Host "Success!!"
