@@ -149,7 +149,7 @@ if (!($PuppetInstalled)) {
   Write-Host "Stopping Puppet service that is running by default..."
   Start-Sleep -s 5
   if ($PuppetCollection) {
-    New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory
+    New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory -force
     Set-Service -Name mcollective -StartupType Disabled -Status Stopped
     Set-Service -Name pxp-agent -StartupType Disabled -Status Stopped
   }
