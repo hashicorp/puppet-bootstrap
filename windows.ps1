@@ -20,6 +20,10 @@
     This is the Collection of Puppet that you want to install. If you pass this it will override the PuppetPackage.
     This defaults to $null.
 
+.PARAMETER PuppetVersion
+    This is the Version of Puppet that you want to install. puppet-agent jumps major versions in Chocolatey.
+    This defaults to $null.
+
 .PARAMETER PuppetCertname
     The certname to use for this puppet agent.
     This defaults to $env:computername.
@@ -45,6 +49,7 @@
 param(
    [string]$PuppetPackage = "puppet"
   ,[string]$PuppetCollection = $env:PuppetCollection
+  ,[string]$PuppetVersion = $env:PuppetVersion
   ,[string]$PuppetCertname = $env:PuppetCertname
   ,[string]$PuppetEnvironment = $env:PuppetEnvironment
   ,[string]$PuppetServer = $env:PuppetServer
@@ -138,6 +143,10 @@ if (!($PuppetInstalled)) {
 
   # Install it - use chocolatey
   $install_args = @("install", $PuppetPackage, "-y", "--allow-empty-checksums")
+  if ($PuppetVersion) {
+    $install_args += "--version"
+    $install_args += $PuppetVersion
+  }
   Write-Host "Installing Puppet. Running choco.exe $install_args"
   $process = Start-Process -FilePath choco.exe -ArgumentList $install_args -Wait -PassThru
   if ($process.ExitCode -ne 0) {
