@@ -1,21 +1,23 @@
 #!/usr/bin/env bash
 #
-# This bootstraps Puppet on Ubuntu 12.04 LTS.
+# This bootstraps Puppet on Ubuntu xx.xx LTS.
 #
-# To try puppet 4 -->  PUPPET_COLLECTION=pc1 ./ubuntu.sh
+# To try puppet 5 -->  PUPPET_COLLECTION=5 ./ubuntu.sh
 #
 set -e
 
 # Load up the release information
 . /etc/lsb-release
 
-# if PUPPET_COLLECTION is not prepended with a dash "-", add it
-[[ "${PUPPET_COLLECTION}" == "" ]] || [[ "${PUPPET_COLLECTION:0:1}" == "-" ]] || \
-  PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
-[[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
-
-REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
-PUPPET_PACKAGE=${PUPPET_PACKAGE:-$PINST}
+PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
+case "${PUPPET_COLLECTION}" in
+pc1) REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release-pc1-${DISTRIB_CODENAME}.deb" ;;
+5)   REPO_DEB_URL="https://apt.puppetlabs.com/puppet5-release-${DISTRIB_CODENAME}.deb" ;;
+*)
+  echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
+  exit 1
+esac
+PUPPET_PACKAGE=${PUPPET_PACKAGE:-"puppet-agent"}
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
@@ -51,13 +53,3 @@ echo "Installing Puppet..."
 DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install ${PUPPET_PACKAGE} >/dev/null
 
 echo "Puppet installed!"
-
-# Install RubyGems for the provider, unless using puppet collections
-if [[ "${PUPPET_COLLECTION}" == "" ]]; then
-  if [ "$DISTRIB_CODENAME" != "trusty" ]; then
-    echo "Installing RubyGems..."
-    apt-get --yes install rubygems >/dev/null
-  fi
-  gem install --no-ri --no-rdoc rubygems-update
-  update_rubygems >/dev/null
-fi
