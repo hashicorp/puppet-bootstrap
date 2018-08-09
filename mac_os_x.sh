@@ -3,20 +3,21 @@
 # This bootstraps Puppet on Mac OS X 10.8 and 10.7.
 #
 # Optional environmental variables:
-#   - FACTER_PACKAGE_URL: The URL to the Facter package to install.
-#   - HIERA_PACKAGE_URL:  The URL to the Hiera package to install.
-#   - PUPPET_PACKAGE_URL: The URL to the Puppet package to install.
+#   - PUPPET_COLLECTION_URL: The URL to the Puppet package to install.
 #
 set -e
 
 #--------------------------------------------------------------------
 # Modifiable variables, please set them via environmental variables.
 #--------------------------------------------------------------------
-FACTER_PACKAGE_URL=${FACTER_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/facter-latest.dmg"}
-HIERA_PACKAGE_URL=${HIERA_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/hiera-latest.dmg"}
-PUPPET_PACKAGE_URL=${PUPPET_PACKAGE_URL:-"https://downloads.puppetlabs.com/mac/puppet-latest.dmg"}
-
-PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/10.13/PC1/x86_64/puppet-agent-latest.dmg"}
+PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
+case "${PUPPET_COLLECTION}" in
+pc1) PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/10.13/PC1/x86_64/puppet-agent-latest.dmg"} ;;
+5)   PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/puppet5/10.13/x86_64/puppet-agent-latest.dmg"} ;;
+*)
+  echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
+  exit 1
+esac
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT.
@@ -69,9 +70,6 @@ if [[ "${PUPPET_COLLECTION}" == "" ]]; then
   gem install puppet -v '~> 3.0' --no-ri --no-rdoc
   mkdir -p /var/lib/puppet /etc/puppet
   touch /etc/puppet/puppet.conf
-  # install_dmg "Facter" "${FACTER_PACKAGE_URL}"
-  # install_dmg "Hiera" "${HIERA_PACKAGE_URL}"
-  # install_dmg "Puppet" "${PUPPET_PACKAGE_URL}"
 else
   install_dmg "puppet-agent" "${PUPPET_COLLECTION_URL}"
 fi
