@@ -20,7 +20,7 @@ else
 fi
 
 case "${PUPPET_ENVIRONMENT}" in
-locdev|loctst|locprd|vagrant)
+locdev|loctst|locprd|vagrant|all)
   PUPPET_CRON_CMD=${PUPPET_CRON_CMD:-"${puppet_cmd} apply --config ${PCONF} --logdest ${logdest} ${PMANIFESTS}"}
   ;;
 *)
