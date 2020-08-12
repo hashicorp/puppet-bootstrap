@@ -4,13 +4,15 @@
 
 set -e
 
-# if PUPPET_COLLECTION is not prepended with a dash "-", add it
-[[ "${PUPPET_COLLECTION}" == "" ]] || [[ "${PUPPET_COLLECTION:0:1}" == "-" ]] || \
-  PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
-[[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
-
-PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-el-6.noarch.rpm"
-PUPPET_PACKAGE=${PUPPET_PACKAGE:-$PINST}
+PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
+case "${PUPPET_COLLECTION}" in
+pc1) PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release-${PUPPET_COLLECTION}-el-6.noarch.rpm" ;;
+5)   PUPPETLABS_RELEASE_RPM="https://yum.puppet.com/puppet${PUPPET_COLLECTION}-release-el-6.noarch.rpm" ;;
+*)
+  echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
+  exit 1
+esac
+PUPPET_PACKAGE=${PUPPET_PACKAGE:-"puppet-agent"}
 
 PATH=$PATH:/opt/puppetlabs/bin
 if [ "${EUID}" -ne "0" ]; then

@@ -22,6 +22,8 @@ Vagrant.configure(2) do |config|
   # You can search for boxes at https://atlas.hashicorp.com/search.
 
   config.vm.hostname = 'bootstrap'
+  config.vbguest.auto_update = false
+  config.vm.synced_folder '.', '/vagrant', disabled: true
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -92,11 +94,11 @@ Vagrant.configure(2) do |config|
     case kernel.to_s
     when 'unix'
       os.vm.provision 'shell', :inline => <<-SHELL
-        curl -sSL https://git.io/vLD6L | sudo bash -s '' locdev pc1
+        curl -sSL https://git.io/vLD6L | sudo bash -s '' locdev 5
       SHELL
     when 'windows'
       os.vm.provision 'shell', :inline => <<-SHELL
-        $env:PuppetCollection = 'pc1'
+        $env:PuppetCollection = '5'
         $env:PuppetEnvironment = 'locdev'
         iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
       SHELL
