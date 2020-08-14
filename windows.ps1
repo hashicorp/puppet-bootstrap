@@ -142,7 +142,7 @@ if (!($PuppetInstalled)) {
   }
 
   # Install it - use chocolatey
-  $install_args = @("install", $PuppetPackage, "-y", "--allow-empty-checksums")
+  $install_args = @("install", $PuppetPackage, "-y")
   if ($PuppetVersion) {
     $install_args += "--version"
     $install_args += $PuppetVersion

@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
   # You can search for boxes at https://atlas.hashicorp.com/search.
 
   config.vm.hostname = 'bootstrap'
-  config.vbguest.auto_update = false
+  # config.vbguest.auto_update = false
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   # Create a private network, which allows host-only access to the machine
@@ -71,8 +71,8 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define 'windows', :autostart => false do |windows|
-    windows.vm.box = 'opentable/win-2012r2-standard-amd64-nocm'
-    provider_settings(windows, 'win-2012r2-standard', true)
+    windows.vm.box = 'StefanScherer/windows_2019'
+    provider_settings(windows, 'win-2019-standard')
     install_puppet(windows, 'windows')
   end
 
@@ -99,6 +99,7 @@ Vagrant.configure(2) do |config|
     when 'windows'
       os.vm.provision 'shell', :inline => <<-SHELL
         $env:PuppetCollection = '5'
+        $env:PuppetVersion = '5.5.21'
         $env:PuppetEnvironment = 'locdev'
         iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
       SHELL
