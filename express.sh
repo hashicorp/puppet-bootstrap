@@ -31,13 +31,17 @@ if [ -z "${PLATFORM}" ]; then
         ;;
       esac
     elif [ -e /etc/system-release ]; then
-      DISTR=$(cat /etc/system-release | cut -f1 -d' ')
+      etcsys_id=$(cat /etc/system-release | cut -f1 -d' ')
       etcsys_re=$(cat /etc/system-release | grep -o [0-9] | head -n 1)
-      PLATFORM="${DISTR}_${etcsys_re}_x"
+      PLATFORM="${etcsys_id}_${etcsys_re}_x"
       echo "[${PLATFORM} Detected]"
-      case "${DISTR}" in
-	      Amazon)
+      case "${etcsys_id}" in
+        RedHatEnterpriseServer|CentOS|OracleServer|EnterpriseEnterpriseServer)
+          PLATFORM="centos_${etcsys_re}_x"
+        ;;
+        Amazon)
           PLATFORM="centos_7_x"
+        ;;
       esac
       echo "[Treated as ${PLATFORM}]"
     fi
