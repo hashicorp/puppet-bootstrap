@@ -47,22 +47,23 @@
     Set to undef to skip setting up the ScheduledTask.
 #>
 param(
-   [string]$PuppetPackage = "puppet"
-  ,[string]$PuppetCollection = $env:PuppetCollection
-  ,[string]$PuppetVersion = $env:PuppetVersion
-  ,[string]$PuppetCertname = $env:PuppetCertname
-  ,[string]$PuppetEnvironment = $env:PuppetEnvironment
-  ,[string]$PuppetServer = $env:PuppetServer
-  ,[string]$PuppetCAServer = $env:PuppetCAServer
-  ,[string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
-  ,[string]$PuppetScheduledTask = $env:PuppetScheduledTask
+  [string]$PuppetPackage = "puppet"
+  , [string]$PuppetCollection = $env:PuppetCollection
+  , [string]$PuppetVersion = $env:PuppetVersion
+  , [string]$PuppetCertname = $env:PuppetCertname
+  , [string]$PuppetEnvironment = $env:PuppetEnvironment
+  , [string]$PuppetServer = $env:PuppetServer
+  , [string]$PuppetCAServer = $env:PuppetCAServer
+  , [string]$chocolateyProxyLocation = $env:chocolateyProxyLocation
+  , [string]$PuppetScheduledTask = $env:PuppetScheduledTask
 )
 
 if ($PuppetCollection) {
   $PuppetPackage = "puppet-agent"
   Write-Host "Puppet Collection $PuppetCollection specified, updated PuppetPackage to `"$PuppetPackage`""
   $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment\manifests"
-} else {
+}
+else {
   $PuppetApplyManifests = "C:\ProgramData\PuppetLabs\puppet\etc\manifests"
 }
 
@@ -72,14 +73,16 @@ if (!($PuppetCertname)) {
   $sysinfo = Get-WmiObject -Class Win32_ComputerSystem
   if ($sysinfo.Name) {
     if ($sysinfo.Domain) {
-      $PuppetCertname = ($sysinfo.Name+"."+$sysinfo.Domain).tolower()
-    } else {
+      $PuppetCertname = ($sysinfo.Name + "." + $sysinfo.Domain).tolower()
+    }
+    else {
       switch -regex ($PuppetEnvironment) {
-        'locprd|production' { $PuppetCertname = ($sysinfo.Name+".it.muohio.edu").tolower() }
-        default             { $PuppetCertname = ($sysinfo.Name+".ittst.muohio.edu").tolower() }
+        'locprd|production' { $PuppetCertname = ($sysinfo.Name + ".it.muohio.edu").tolower() }
+        default { $PuppetCertname = ($sysinfo.Name + ".ittst.muohio.edu").tolower() }
       }
     }
-  } else {
+  }
+  else {
     Write-Error "Can not auto determine PuppetCertname."
     Exit 1
   }
@@ -87,8 +90,8 @@ if (!($PuppetCertname)) {
 
 if (!($PuppetServer)) {
   switch -regex ($PuppetEnvironment) {
-    'locdev|loctst|locprd|vagrant|all'                               { $PuppetServer = "localhost" }
-    'esodev|esotst'                                                  { $PuppetServer = "uitlpupt10.mcs.miamioh.edu" }
+    'locdev|loctst|locprd|vagrant|all' { $PuppetServer = "localhost" }
+    'esodev|esotst' { $PuppetServer = "uitlpupt10.mcs.miamioh.edu" }
     'development|test|staging|production|operations|shared_services' { $PuppetServer = "uitlpupp10.mcs.miamioh.edu" }
     default {
       Write-Error "Unknown/Unsupported PuppetEnvironment."
@@ -101,24 +104,26 @@ if (!($PuppetCAServer)) { $PuppetCAServer = $PuppetServer }
 $PuppetCmd = "C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat"
 switch -regex ($PuppetEnvironment) {
   'locdev|loctst|locprd|vagrant|all' { $PuppetArg = "apply --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf $PuppetApplyManifests" }
-  default                            { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
+  default { $PuppetArg = "agent --config C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf --onetime --no-daemonize" }
 }
 
 $PuppetInstalled = $false
 try {
   $ErrorActionPreference = "Stop";
   Get-Command choco | Out-Null
-  $ChocoList=&choco list --limit-output --local-only --exact $PuppetPackage
+  $ChocoList = &choco list --limit-output --local-only --exact $PuppetPackage
   if ($ChocoList) {
     Get-Command puppet | Out-Null
     $PuppetInstalled = $true
-    $PuppetVersion=&puppet "--version"
+    $PuppetVersion = &puppet "--version"
     Write-Host "Puppet $PuppetVersion is installed. This process does not ensure the exact version or at least version specified, but only that puppet is installed. Exiting..."
     Exit 0
-  } else {
+  }
+  else {
     Write-Host "Puppet is not installed, continuing..."
   }
-} catch {
+}
+catch {
   Write-Host "Puppet is not installed, continuing..."
 }
 
@@ -133,11 +138,12 @@ if (!($PuppetInstalled)) {
   Write-Host "Installing Chocolatey"
   $WebClient = New-Object System.Net.WebClient
   if ($chocolateyProxyLocation) {
-    $WebProxy = New-Object System.Net.WebProxy($chocolateyProxyLocation,$true)
+    $WebProxy = New-Object System.Net.WebProxy($chocolateyProxyLocation, $true)
     $WebClient.Proxy = $WebProxy
     iex ($WebClient.DownloadString('https://chocolatey.org/install.ps1'))
     choco config set proxy $chocolateyProxyLocation
-  } else {
+  }
+  else {
     iex ($WebClient.DownloadString('https://chocolatey.org/install.ps1'))
   }
 
@@ -168,14 +174,15 @@ if (!($PuppetInstalled)) {
 
   if ($PuppetEnvironment -ne "vagrant") {
     $dir_prefix = 'C:/ProgramData/PuppetLabs/puppet'
-    $var_dir="${dir_prefix}/var"
-    $log_dir="${dir_prefix}/var/log"
-    $run_dir="${dir_prefix}/var/run"
-    $ssl_dir="${dir_prefix}/etc/ssl"
+    $var_dir = "${dir_prefix}/var"
+    $log_dir = "${dir_prefix}/var/log"
+    $run_dir = "${dir_prefix}/var/run"
+    $ssl_dir = "${dir_prefix}/etc/ssl"
     if ($PuppetCollection) {
       $extra_a_options = ''
       $extra_u_options = ''
-    } else {
+    }
+    else {
       $extra_a_options = '
     stringify_facts = false'
       $extra_u_options = '
@@ -185,7 +192,7 @@ if (!($PuppetInstalled)) {
     }
 
     Write-Host "Configuring Puppet..."
-@"
+    @"
 ### File placed by puppet-bootstrap ###
 ## https://docs.puppet.com/puppet/latest/reference/configuration.html
 #
@@ -212,7 +219,8 @@ if (!($PuppetInstalled)) {
 
     if ($PuppetScheduledTask -eq "undef") {
       Write-Host "NOT Starting Puppet ScheduledTask..."
-    } else {
+    }
+    else {
       Write-Host "Starting Puppet ScheduledTask..."
       schtasks /create /tn "puppet" /tr "'$PuppetCmd' $PuppetArg" /sc DAILY /st 12:00 /ri 60 /du 24:00 /ru SYSTEM /rl HIGHEST /f
     }
