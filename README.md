@@ -33,7 +33,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
 ### Install/Configure/Start Puppet (Windows - production)
 ```shell
 # PowerShell
-$env:PuppetCollection = 'pc1'
+$env:PuppetCollection = '5'
 $env:PuppetEnvironment = 'production'
 iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
 ```
@@ -41,7 +41,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://git.io/vanax'))
 ### Install/Configure/Start Puppet (Windows - behind proxy)
 ```shell
 # PowerShell
-$env:PuppetCollection = 'pc1'
+$env:PuppetCollection = '5'
 $env:PuppetEnvironment = 'test' # or production
 $env:chocolateyProxyLocation = 'http://webproxy.mcs.miamioh.edu:80'
 $WebClient = New-Object System.Net.WebClient
