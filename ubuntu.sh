@@ -12,7 +12,7 @@ set -e
 PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
 case "${PUPPET_COLLECTION}" in
 pc1) REPO_DEB_URL="https://apt.puppetlabs.com/puppetlabs-release-pc1-${DISTRIB_CODENAME}.deb" ;;
-5)   REPO_DEB_URL="https://apt.puppetlabs.com/puppet5-release-${DISTRIB_CODENAME}.deb" ;;
+5|6)   REPO_DEB_URL="https://apt.puppetlabs.com/puppet5-release-${DISTRIB_CODENAME}.deb" ;;
 *)
   echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
   exit 1

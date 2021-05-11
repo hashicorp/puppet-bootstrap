@@ -7,7 +7,7 @@ set -e
 PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
 case "${PUPPET_COLLECTION}" in
 pc1) PUPPETLABS_RELEASE_RPM="https://yum.puppetlabs.com/puppetlabs-release-${PUPPET_COLLECTION}-el-7.noarch.rpm" ;;
-5)   PUPPETLABS_RELEASE_RPM="https://yum.puppet.com/puppet${PUPPET_COLLECTION}-release-el-7.noarch.rpm" ;;
+5|6)   PUPPETLABS_RELEASE_RPM="https://yum.puppet.com/puppet${PUPPET_COLLECTION}-release-el-7.noarch.rpm" ;;
 *)
   echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
   exit 1

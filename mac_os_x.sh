@@ -13,7 +13,7 @@ set -e
 PUPPET_COLLECTION=${PUPPET_COLLECTION:-"pc1"}
 case "${PUPPET_COLLECTION}" in
 pc1) PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/10.13/PC1/x86_64/puppet-agent-latest.dmg"} ;;
-5)   PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/puppet5/10.13/x86_64/puppet-agent-latest.dmg"} ;;
+5|6)   PUPPET_COLLECTION_URL=${PUPPET_COLLECTION_URL:-"https://downloads.puppetlabs.com/mac/puppet5/10.13/x86_64/puppet-agent-latest.dmg"} ;;
 *)
   echo "Unknown/Unsupported PUPPET_COLLECTION." >&2
   exit 1
