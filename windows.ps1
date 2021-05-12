@@ -165,7 +165,12 @@ if (!($PuppetInstalled)) {
   Start-Sleep -s 5
   if ($PuppetCollection) {
     New-Item -path "C:\ProgramData\PuppetLabs\code\environments\$PuppetEnvironment" -type directory -force
-    Set-Service -Name mcollective -StartupType Disabled -Status Stopped
+    try {
+      Set-Service -Name mcollective -StartupType Disabled -Status Stopped
+    }
+    catch {
+      Write-Host "Service mcollective not installed"
+    }
     Set-Service -Name pxp-agent -StartupType Disabled -Status Stopped
   }
   Set-Service -Name puppet -StartupType Disabled -Status Stopped
