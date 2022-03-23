@@ -26,6 +26,7 @@ case "${PLATFORM}" in
 redhat_5|centos_5|centos_5_x) source "${BOOTSTRAP_HOME}/centos_5_x.sh" ;;
 redhat_6|centos_6|centos_6_x) source "${BOOTSTRAP_HOME}/centos_6_x.sh" ;;
 redhat_7|centos_7|centos_7_x) source "${BOOTSTRAP_HOME}/centos_7_x.sh" ;;
+redhat_8|centos_8|centos_8_x) source "${BOOTSTRAP_HOME}/oraclelinux_8_x.sh" ;;
 debian) source "${BOOTSTRAP_HOME}/debian.sh" ;;
 ubuntu) source "${BOOTSTRAP_HOME}/ubuntu.sh" ;;
 osx|mac_os_x)
@@ -34,7 +35,7 @@ osx|mac_os_x)
   ;;
 *)
   echo "Unknown/Unsupported PLATFORM." >&2
-  echo "Usage: $0 {redhat_5|redhat_6|redhat_7|debian|ubuntu|osx} [environment] [server]" >&2
+  echo "Usage: $0 {redhat_5|redhat_6|redhat_7|redhat_8|debian|ubuntu|osx} [environment] [server]" >&2
   exit 1
 esac
 
