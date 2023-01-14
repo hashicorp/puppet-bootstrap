@@ -14,7 +14,7 @@ which lsb_release || apt-get --yes install lsb-release
 # Load up the release information
 DISTRIB_CODENAME=$(lsb_release -c -s)
 
-REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release-${DISTRIB_CODENAME}.deb"
+REPO_DEB_URL="http://apt.puppetlabs.com/puppet-release-${DISTRIB_CODENAME}.deb"
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
