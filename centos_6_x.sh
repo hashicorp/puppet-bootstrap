@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 # Bootstrap Puppet on CentOS 6.x
 # Tested on CentOS 6.5 64bit
 

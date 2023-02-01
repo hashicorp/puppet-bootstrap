@@ -1,4 +1,7 @@
 #!/usr/bin/env bash 
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 #
 # This bootstraps Puppet on Mac OS X 10.9 - 10.12 && is depecrated for 10.7/10.8
 #
