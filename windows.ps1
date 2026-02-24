@@ -19,10 +19,15 @@
 .PARAMETER PuppetVersion
     This is the version of Puppet that you want to install. If you pass this it will override the version in the MsiUrl.
     This defaults to $null.
+
+.PARAMETER PuppetMaster
+    This is the hostname of the puppet master.
+    This defaults to $null.
 #>
 param(
    [string]$MsiUrl = "https://downloads.puppetlabs.com/windows/puppet-3.3.2.msi"
   ,[string]$PuppetVersion = $null
+  ,[string]$PuppetMaster = $null
 )
 
 if ($PuppetVersion) {
@@ -49,8 +54,14 @@ if (!($PuppetInstalled)) {
     Exit 1
   }
 
+  if ($PuppetMaster -ne $null) {
+    $install_args = @("/qn", "/norestart","/i", "$MsiUrl", "PUPPET_MASTER_SERVER=$PuppetMaster")
+  } else {
+    $install_args = @("/qn", "/norestart","/i", $MsiUrl)
+  }
+
   # Install it - msiexec will download from the url
-  $install_args = @("/qn", "/norestart","/i", $MsiUrl)
+
   Write-Host "Installing Puppet. Running msiexec.exe $install_args"
   $process = Start-Process -FilePath msiexec.exe -ArgumentList $install_args -Wait -PassThru
   if ($process.ExitCode -ne 0) {
@@ -64,4 +75,23 @@ if (!($PuppetInstalled)) {
   Stop-Service -Name puppet
 
   Write-Host "Puppet successfully installed."
+}
+
+function add-hostfilecontent {            
+ [CmdletBinding(SupportsShouldProcess=$true)]            
+ param (            
+  [parameter(Mandatory=$true)]            
+  [ValidatePattern("\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b")]            
+  [string]$IPAddress,            
+              
+  [parameter(Mandatory=$true)]            
+  [string]$computer            
+ )            
+ $file = Join-Path -Path $($env:windir) -ChildPath "system32\drivers\etc\hosts"            
+ if (-not (Test-Path -Path $file)){            
+   Throw "Hosts file not found"            
+ }            
+ $data = Get-Content -Path $file             
+ $data += "$IPAddress  $computer"            
+ Set-Content -Value $data -Path $file -Force -Encoding ASCII             
 }
