@@ -14,7 +14,11 @@ set -e
   PUPPET_COLLECTION="-${PUPPET_COLLECTION}"
 [[ "${PUPPET_COLLECTION}" == "" ]] && PINST="puppet" || PINST="puppet-agent"
 
-REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
+if [[ "${DISTRIB_CODENAME}" == 'bionic' ]]; then
+  REPO_DEB_URL="http://apt.puppetlabs.com/puppet${PUPPET_VERSION}-release-${DISTRIB_CODENAME}.deb"
+else
+  REPO_DEB_URL="http://apt.puppetlabs.com/puppetlabs-release${PUPPET_COLLECTION}-${DISTRIB_CODENAME}.deb"
+fi
 
 #--------------------------------------------------------------------
 # NO TUNABLES BELOW THIS POINT
