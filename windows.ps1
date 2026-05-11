@@ -1,3 +1,5 @@
+# Copyright IBM Corp. 2012, 2026
+
 <#
 .SYNOPSIS
     Installs Puppet on this machine.

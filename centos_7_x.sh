@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright IBM Corp. 2012, 2026
+
 # This bootstraps Puppet on CentOS 7.x
 # It has been tested on CentOS 7.0 64bit
 
