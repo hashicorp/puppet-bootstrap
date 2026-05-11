@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright IBM Corp. 2012, 2026
+
 #
 # This bootstraps Puppet on Solaris 10/11.
 #

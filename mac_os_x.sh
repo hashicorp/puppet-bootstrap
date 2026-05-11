@@ -1,4 +1,6 @@
 #!/usr/bin/env bash 
+# Copyright IBM Corp. 2012, 2026
+
 #
 # This bootstraps Puppet on Mac OS X 10.9 - 10.12 && is depecrated for 10.7/10.8
 #

@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+# Copyright IBM Corp. 2012, 2026
+
 
 set -e
 
